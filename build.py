@@ -41,7 +41,8 @@ for key, rel in RL_EPS:
     rl_eps.append(episode(u.get('title',TITLES[key]), yid(u.get('url','')), (d/'description.md').read_text(), (d/'chapters.txt').read_text(), mmss(dur(RLV/rel))))
 
 # shorts
-M = OUT/'media'; M.mkdir(exist_ok=True)
+RLD = OUT/'remotelylocal'; GWD = OUT/'gigsandwigs'; RLD.mkdir(exist_ok=True); GWD.mkdir(exist_ok=True)
+M = RLD/'media'; M.mkdir(exist_ok=True)
 src = RLV/'review-shorts'
 shorts = json.loads((src/'shorts.json').read_text()); sh=[]
 for ep in shorts:
@@ -79,18 +80,16 @@ details summary{cursor:pointer;color:#4fb3f0;font-family:'IBM Plex Mono',monospa
 video{width:100%;aspect-ratio:9/16;background:#000;display:block}.meta{padding:10px 12px;font-size:14px}.meta h4{font-family:'IBM Plex Mono',monospace;margin:6px 0;font-size:15px}.meta p{margin:4px 0}.cap{color:#9fb2c8}
 .gw{border-color:#5a1a1a}.gwh{color:#e8b7a8}.btn{display:inline-block;margin:6px 10px 0 0;padding:8px 14px;border:1px solid #0094E6;border-radius:6px;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:14px}'''
 
-page = f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Podcast previews</title>
+def page(title, nav, body):
+    return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>{title}</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>{CSS}</style></head><body><main>
-<header><h1><span class="p">❯</span>previews<span class="p">_</span></h1>
-<nav><a href="#remotely-local">Remotely Local</a><a href="#shorts">Shorts</a><a href="#gigs-and-wigs">Gigs and Wigs</a></nav>
+<header><h1><span class="p">❯</span>{title}<span class="p">_</span></h1><nav>{nav}</nav>
 <p class="note">Work in progress, for review. Episodes are unlisted on YouTube; please don't share the links publicly yet.</p></header>
-<h2 id="remotely-local">Remotely Local · new episodes</h2>{''.join(rl_eps)}
-<h2 id="shorts">Remotely Local · shorts</h2>{''.join(sh)}
-<h2 id="gigs-and-wigs">Gigs and Wigs · Episodes 1–6</h2>
-<p class="note">New versions with Vicki's camera and the red/cream end card. <a class="btn" href="{GW_REVIEW}/" target="_blank" rel="noopener">Gigs and Wigs review site</a><a class="btn" href="{GW_REVIEW}/shorts.html" target="_blank" rel="noopener">Gigs and Wigs shorts (30)</a></p>
-{''.join(gw)}
-</main></body></html>'''
-(OUT/'index.html').write_text(page)
-print('built', len(page), 'bytes;', sum(1 for _ in M.glob('*.mp4')), 'shorts')
+{body}</main></body></html>'''
+rl_body = f'''<h2 id="episodes">New episodes</h2>{''.join(rl_eps)}<h2 id="shorts">Shorts</h2>{''.join(sh)}'''
+(RLD/'index.html').write_text(page('remotely.local', '<a href="#episodes">Episodes</a><a href="#shorts">Shorts</a><a href="/gigsandwigs/">Gigs and Wigs</a>', rl_body))
+gw_body = f'''<h2 id="episodes">Episodes 1–6</h2><p class="note">New versions with Vicki's camera and the red/cream end card. <a class="btn" href="{GW_REVIEW}/" target="_blank" rel="noopener">Gigs and Wigs review site</a><a class="btn" href="{GW_REVIEW}/shorts.html" target="_blank" rel="noopener">Gigs and Wigs shorts (30)</a></p>{''.join(gw)}'''
+(GWD/'index.html').write_text(page('gigs and wigs', '<a href="/remotelylocal/">Remotely Local</a>', gw_body))
+print('built;', sum(1 for _ in M.glob('*.mp4')), 'shorts')
