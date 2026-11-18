@@ -155,6 +155,21 @@ footer a:hover{color:var(--ink)}
 }
 @media (max-width:560px){header nav a.hide-sm{display:none}header nav{gap:16px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;animation:none!important}}
+
+/* photo hero, Gigs-style centered */
+.hero{background:var(--bg)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;opacity:1;mask-image:none;-webkit-mask-image:none;background:url(assets/hero-1920.jpg) center 28%/cover no-repeat}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,7,13,.50) 0%,rgba(5,7,13,.62) 50%,rgba(5,7,13,.96) 100%)}
+.hero .wrap{padding:150px 0 110px;text-align:center}
+.wordmark{text-shadow:0 4px 30px rgba(0,0,0,.65)}
+.hero .tagline,.hero .lede{margin-left:auto;margin-right:auto;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.hero .lede{color:rgba(244,243,246,.88)}
+.hero .ctas{justify-content:center}
+.about-grid{grid-template-columns:1fr 1.05fr;align-items:center}
+.about-photo{max-width:520px;justify-self:center;border-radius:14px;overflow:hidden;border:6px solid var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line);transform:rotate(-1.5deg)}
+.about-photo img{width:100%;height:auto}
+.about .topics{margin-top:26px}
+@media (max-width:900px){.hero::before{background-image:url(assets/hero-1200.jpg);background-position:center 20%}.hero .wrap{padding:110px 0 80px}}
 </style>
 </head>
 <body>
@@ -174,7 +189,6 @@ footer a:hover{color:var(--ink)}
 <main id="top">
   <section class="hero" aria-label="Remotely.Local">
     <div class="wrap">
-      <img class="banner" src="assets/banner-1600.jpg" srcset="assets/banner-1600.jpg 1600w, assets/banner.jpg 2172w" sizes="(max-width:1184px) calc(100vw - 44px), 1140px" width="2172" height="724" alt="Remotely.Local" fetchpriority="high">
       <div>
         <h1 class="wordmark"><span class="pr">❯</span>remotely<span class="p">.local</span><span class="cursor" aria-hidden="true">_</span></h1>
         <p class="tagline">The podcast where the physical world meets the connected world.</p>
@@ -300,19 +314,17 @@ footer a:hover{color:var(--ink)}
 
   <section id="about" class="about">
     <div class="wrap about-grid">
+      <div class="about-photo"><img src="assets/hosts.jpg" alt="Mike Johnson and Ryo Koyama recording Remotely.Local" loading="lazy" width="1100" height="688"></div>
       <div>
-        <span class="label">About the show</span>
+        <span class="label">Meet your hosts</span>
         <h2>Every machine is joining the network.</h2>
         <p>Every machine, sensor, robot, vehicle and smart device is becoming part of a much larger, intelligent network. Remotely.Local explores the technologies making that future possible, and the people building them.</p>
-        <p>We dig into the architectures, protocols, platforms and real‑world lessons behind everything from factory floors and critical infrastructure to consumer devices and AI at the edge.</p>
         <div class="host"><strong>Ryo Koyama</strong><span>Founder of remote.it and noBGP.</span></div>
         <div class="host"><strong>Mike Johnson</strong><span>Co‑founder of remote.it.</span></div>
-      </div>
-      <div>
-        <span class="label">What we cover</span>
-        <div class="chips" style="margin-top:22px">
-          <span>Physical AI</span><span>Embodied intelligence</span><span>Industrial IoT</span><span>Edge AI</span><span>Edge computing</span><span>Secure networking</span><span>Remote access</span><span>Device management</span><span>Robotics</span><span>Autonomous systems</span><span>Distributed computing</span><span>Cybersecurity</span>
-        </div>
+        <div class="topics"><span class="label">What we cover</span>
+        <div class="chips" style="margin-top:14px">
+          <span>Physical AI</span><span>Industrial IoT</span><span>Edge AI</span><span>Edge computing</span><span>Secure networking</span><span>Remote access</span><span>Device management</span><span>Robotics</span><span>Autonomous systems</span><span>Cybersecurity</span>
+        </div></div>
       </div>
     </div>
   </section>
