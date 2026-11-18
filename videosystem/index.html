@@ -51,7 +51,7 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font:14
 <ul>
 <li><strong>One machine with a GPU and lots of storage.</strong> Mine is a Linux box with an NVIDIA RTX 4070 Super. Raw multi-camera footage adds up fast, so plan for terabytes. An Apple Silicon Mac mini also works.</li>
 <li><strong>Claude Code</strong> on that machine. It does the actual editing work.</li>
-<li><strong>video-use</strong>, an open-source Claude Code skill for editing long-form video from a brief.</li>
+<li><strong><a href="https://github.com/browser-use/video-use">video-use</a></strong>, an open-source Claude Code skill for editing long-form video from a brief.</li>
 <li><strong><a href="https://github.com/lowerpower/cutcannon">CutCannon</a></strong>, an open-source toolkit for vertical shorts (more on it in Step 6).</li>
 <li><strong>ffmpeg</strong> and a transcription model. Both tools use them under the hood.</li>
 <li><strong>A way to drive the machine remotely.</strong> I run everything from Claude chat on my laptop or phone. The machine is on my noBGP network, so Claude can run commands and read files on it. SSH or any remote-access setup you already trust will do the same job.</li>
@@ -94,7 +94,7 @@ for me before you use any of them in an edit.</code></pre>
 <p>Do the sync once per episode. Both the long-form edit and the shorts reuse it.</p>
 
 <h2>Step 4: Edit the long-form episode</h2>
-<p>Run Claude Code with video-use in the episode folder and point it at the show’s brief. A first pass on a 30-minute episode is a single prompt.</p>
+<p>Run Claude Code with <a href="https://github.com/browser-use/video-use">video-use</a> in the episode folder and point it at the show’s brief. A first pass on a 30-minute episode is a single prompt.</p>
 <p class="label">Prompt: edit an episode (sent from Claude chat)</p>
 <pre><code>New Remotely Local episode in /videos/remotely-local/backstory:
 two cameras plus the RØDECaster multitrack. Use video-use with
@@ -261,7 +261,7 @@ Nothing gets uploaded.</code></pre>
 </ul>
 <p>The hours of syncing, cutting, captioning and rendering are gone. What’s left is the part I actually like: choosing what goes out.</p>
 
-<footer>Draft · <a href="https://x.com/ofcourseduh">@ofcourseduh</a> · <a href="https://github.com/lowerpower/cutcannon">CutCannon on GitHub</a></footer>
+<footer>Draft · <a href="https://x.com/ofcourseduh">@ofcourseduh</a> · <a href="https://github.com/browser-use/video-use">video-use on GitHub</a> · <a href="https://github.com/lowerpower/cutcannon">CutCannon on GitHub</a></footer>
 </main>
 </body>
 </html>
