@@ -169,7 +169,10 @@ footer a:hover{color:var(--ink)}
 .about-photo{max-width:520px;justify-self:center;border-radius:14px;overflow:hidden;border:6px solid var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line);transform:rotate(-1.5deg)}
 .about-photo img{width:100%;height:auto}
 .about .topics{margin-top:26px}
-@media (max-width:900px){.hero::before{background-image:url(assets/hero-1200.jpg);background-position:center 20%}.hero .wrap{padding:110px 0 80px}}
+.hero-photo-m{display:none}
+@media (max-width:700px){.hero::before,.hero::after{display:none}.hero-photo-m{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line);margin-bottom:30px}.hero .wrap{padding:22px 0 64px}.hero .tagline,.hero .lede,.wordmark{text-shadow:none}}
+@media (min-width:701px) and (max-width:900px){.hero::before{background-image:url(assets/hero-1200.jpg)}.hero .wrap{padding:110px 0 80px}}
+.wordmark{font-size:clamp(1.9rem,8.4vw,4.4rem)}
 </style>
 </head>
 <body>
@@ -189,6 +192,7 @@ footer a:hover{color:var(--ink)}
 <main id="top">
   <section class="hero" aria-label="Remotely.Local">
     <div class="wrap">
+      <img class="hero-photo-m" src="assets/hosts.jpg" alt="Mike Johnson and Ryo Koyama recording Remotely.Local" width="1100" height="688">
       <div>
         <h1 class="wordmark"><span class="pr">❯</span>remotely<span class="p">.local</span><span class="cursor" aria-hidden="true">_</span></h1>
         <p class="tagline">The podcast where the physical world meets the connected world.</p>
