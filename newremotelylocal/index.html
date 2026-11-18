@@ -86,6 +86,11 @@ section{padding:92px 0}
 .links{display:flex;gap:18px;flex-wrap:wrap}
 .links a{font:700 .74rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);text-decoration:none}
 .links a:hover{text-decoration:underline;text-underline-offset:5px}
+.group{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:8px 0 -4px}
+.group h3{font:700 1rem/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.group span{font:500 .8rem/1.4 var(--mono);color:var(--muted)}
+.group.later{margin-top:28px}
+.tag.new{background:var(--blue);color:#fff}
 @media (max-width:860px){.ep-row{grid-template-columns:1fr;gap:18px;padding:14px}.ep-row .info{padding:0 6px 6px}}
 
 /* shorts */
@@ -178,10 +183,58 @@ footer a:hover{color:var(--ink)}
   <section id="episodes">
     <div class="wrap">
       <div class="section-head">
-        <span class="label">Season 01</span>
+        <span class="label">Watch</span>
         <h2>Episodes<span class="cursor" aria-hidden="true">_</span></h2>
       </div>
       <div class="ep-list">
+
+        <div class="group"><h3>Coming up</h3><span>Unlisted on YouTube for review. Please don’t share these links yet.</span></div>
+
+        <article class="ep-row" id="span">
+          <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/-shmzYEupzA?rel=0&amp;modestbranding=1" title="Data Centers in Your Backyard with Josh Mustill of SPAN" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="info">
+            <div class="meta"><span class="label">New</span><span class="dur">22:19</span><span class="tag new">Preview</span><span class="tag">Guest</span></div>
+            <h3>Data Centers in Your Backyard with Josh Mustill of SPAN</h3>
+            <p class="hook">What if the next data center wasn’t in the desert, but in your neighbor’s backyard?</p>
+            <p>Ryo and Mike visit SPAN in San Francisco. Josh Mustill explains how SPAN’s smart electrical panel gives homeowners, builders and utilities live visibility into power use, and walks through Xfra, SPAN’s project with NVIDIA that runs micro data centers next to homes on excess solar. Plus NEM 3.0, securing a data center in someone’s garden, and nearly eight years of fixing panels remotely with remote.it.</p>
+            <div class="links"><a href="https://youtu.be/-shmzYEupzA" target="_blank" rel="noopener">YouTube →</a></div>
+          </div>
+        </article>
+
+        <article class="ep-row" id="batfast">
+          <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/g1pJtHJvguY?rel=0&amp;modestbranding=1" title="Bringing AI to Batting Practice with Jignesh Patel of BatFast" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="info">
+            <div class="meta"><span class="label">New</span><span class="dur">22:41</span><span class="tag new">Preview</span><span class="tag">Guest</span></div>
+            <h3>Bringing AI to Batting Practice with Jignesh Patel of BatFast</h3>
+            <p class="hook">What do a Kenyan cricket dream, a hacked Australian pitching machine and a Honda Civic have to do with physical AI?</p>
+            <p>Jignesh Patel of BatFast, maker of operator‑less batting simulators for cricket, baseball, tennis and lacrosse, on reverse‑engineering their first ball machine, a birthday‑party request that became the business, and running more than 280 systems in over 24 countries remotely.</p>
+            <div class="links"><a href="https://youtu.be/g1pJtHJvguY" target="_blank" rel="noopener">YouTube →</a></div>
+          </div>
+        </article>
+
+        <article class="ep-row" id="backstory">
+          <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/P0kVIjdWs7w?rel=0&amp;modestbranding=1" title="Defying Entropy: Mike Johnson on the Group 42 CD, Anchor ID and AI Attribution" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="info">
+            <div class="meta"><span class="label">New</span><span class="dur">29:56</span><span class="tag new">Preview</span><span class="tag">Hosts</span></div>
+            <h3>Defying Entropy: Mike Johnson on the Group 42 CD, Anchor ID and AI Attribution</h3>
+            <p class="hook">From a hacker CD‑ROM in the mid‑’90s to a UUID that could stop AI from forgetting who made what.</p>
+            <p>Mike goes back to the Group 42 CD, a 1994–95 archive built in HTML, and the “defy entropy” mantra it gave him. Then he explains Anchor ID, an open‑source way to tie your work and online identities to one UUID so it stays attributed to you when AI trains on it. Ryo argues AI’s training data is this generation’s history books.</p>
+            <div class="links"><a href="https://youtu.be/P0kVIjdWs7w" target="_blank" rel="noopener">YouTube →</a></div>
+          </div>
+        </article>
+
+        <article class="ep-row" id="music">
+          <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/bMVtDDIcd6U?rel=0&amp;modestbranding=1" title="Making Music with AI: Mike Johnson on a Playa Gift, Chronosonics and a Clear Lake Album" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="info">
+            <div class="meta"><span class="label">New</span><span class="dur">18:51</span><span class="tag new">Preview</span><span class="tag">Hosts</span></div>
+            <h3>Making Music with AI: Mike Johnson on a Playa Gift, Chronosonics and a Clear Lake Album</h3>
+            <p class="hook">From a Burning Man playa gift to a Clear Lake concept album sung in his own voice.</p>
+            <p>Mike’s accidental music career: an album handed out on 75 USB necklaces at Burning Man, Chronosonics (a song for every blog post), and an Americana concept album about 22 summers at Clear Lake, made with his own voice and a local model on one of his 3090s. Ryo argues AI music is the opposite of vibe coding.</p>
+            <div class="links"><a href="https://youtu.be/bMVtDDIcd6U" target="_blank" rel="noopener">YouTube →</a></div>
+          </div>
+        </article>
+
+        <div class="group later"><h3>Season 01</h3><span>Out now</span></div>
 
         <article class="ep-row" id="s01e03">
           <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/T31HCp2dQ8Y?rel=0&amp;modestbranding=1" title="Fighting AI Scams with Patrick Coughlin of Savi Security" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
@@ -243,7 +296,7 @@ footer a:hover{color:var(--ink)}
         <p>Every machine, sensor, robot, vehicle and smart device is becoming part of a much larger, intelligent network. Remotely.Local explores the technologies making that future possible, and the people building them.</p>
         <p>We dig into the architectures, protocols, platforms and real‑world lessons behind everything from factory floors and critical infrastructure to consumer devices and AI at the edge.</p>
         <div class="host"><strong>Ryo Koyama</strong><span>Founder of remote.it and noBGP.</span></div>
-        <div class="host"><strong>Mike Johnson</strong><span>Co‑host.</span></div>
+        <div class="host"><strong>Mike Johnson</strong><span>Co‑founder of remote.it.</span></div>
       </div>
       <div>
         <span class="label">What we cover</span>
