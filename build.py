@@ -1,11 +1,9 @@
-"""Build the ofcourseduh.com preview site (Remotely Local + Gigs and Wigs). Run: python3 build.py && git add -A && git commit && git push
+"""Build the ofcourseduh.com preview site (Remotely Local). Run: python3 build.py && git add -A && git commit && git push
 Episodes are unlisted YouTube embeds; Remotely Local shorts are copied as web mp4s from _videouse/review-shorts/media."""
 import html, json, re, shutil, subprocess
 from pathlib import Path
 OUT = Path(__file__).parent
 RLV = Path('/mnt/work/videos/Remotely Local/_videouse')
-GW = Path('/mnt/work/videos/gigsandwigs/_production')
-GW_REVIEW = 'https://r4zxhtinakh6.nobgp.link'
 esc = html.escape
 
 def yid(u): m = re.search(r'([\w-]{11})$', u or ''); return m.group(1) if m else ''
@@ -41,7 +39,7 @@ for key, rel in RL_EPS:
     rl_eps.append(episode(u.get('title',TITLES[key]), yid(u.get('url','')), (d/'description.md').read_text(), (d/'chapters.txt').read_text(), mmss(dur(RLV/rel))))
 
 # shorts
-RLD = OUT/'remotelylocal'; GWD = OUT/'gigsandwigs'; RLD.mkdir(exist_ok=True); GWD.mkdir(exist_ok=True)
+RLD = OUT/'remotelylocal'; RLD.mkdir(exist_ok=True)
 M = RLD/'media'; M.mkdir(exist_ok=True)
 src = RLV/'review-shorts'
 shorts = json.loads((src/'shorts.json').read_text()); sh=[]
@@ -55,13 +53,6 @@ for ep in shorts:
         sh.append(f'''<div class="card"><video controls playsinline preload="none" poster="media/{s["code"]}.jpg" src="media/{s["code"]}.mp4"></video>
 <div class="meta"><b>{s["code"]}</b> · {d:.0f}s<h4><span class="p">&gt;</span> {esc(s["hook"])}<span class="p">_</span></h4><p>{esc(s["what"])}</p><p class="cap">{esc(s["caption"])}</p></div></div>''')
     sh.append('</div>')
-
-# ---------- Gigs and Wigs ----------
-gwu = json.loads((GW/'youtube'/'uploads.json').read_text()); gw=[]
-for n in sorted(gwu, key=int):
-    e=gwu[n]; d=GW/'episodes'/f'ep-{int(n):02d}'
-    desc=(GW/'youtube'/'descriptions'/f'ep-{int(n):02d}.txt').read_text()
-    gw.append(episode(f'Episode {n} · {e["title"]}', yid(e['url']), desc, (d/'chapters.txt').read_text(), mmss(dur(d/'final.mp4'))))
 
 CSS = '''*{box-sizing:border-box}body{margin:0;background:#05070d;color:#F4F3F6;font:16px/1.55 'IBM Plex Sans',system-ui,sans-serif}
 main{max-width:1180px;margin:0 auto;padding:28px 18px 70px}a{color:#4fb3f0}
@@ -89,7 +80,5 @@ def page(title, nav, body):
 <p class="note">Work in progress, for review. Episodes are unlisted on YouTube; please don't share the links publicly yet.</p></header>
 {body}</main></body></html>'''
 rl_body = f'''<h2 id="episodes">New episodes</h2>{''.join(rl_eps)}<h2 id="shorts">Shorts</h2>{''.join(sh)}'''
-(RLD/'index.html').write_text(page('remotely.local', '<a href="#episodes">Episodes</a><a href="#shorts">Shorts</a><a href="/gigsandwigs/">Gigs and Wigs</a>', rl_body))
-gw_body = f'''<h2 id="episodes">Episodes 1–6</h2><p class="note">New versions with Vicki's camera and the red/cream end card. <a class="btn" href="{GW_REVIEW}/" target="_blank" rel="noopener">Gigs and Wigs review site</a><a class="btn" href="{GW_REVIEW}/shorts.html" target="_blank" rel="noopener">Gigs and Wigs shorts (30)</a></p>{''.join(gw)}'''
-(GWD/'index.html').write_text(page('gigs and wigs', '<a href="/remotelylocal/">Remotely Local</a>', gw_body))
+(RLD/'index.html').write_text(page('remotely.local', '<a href="#episodes">Episodes</a><a href="#shorts">Shorts</a>', rl_body))
 print('built;', sum(1 for _ in M.glob('*.mp4')), 'shorts')
