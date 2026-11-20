@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>X Article · How I produce multiple podcasts with Claude</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1f;--muted:#6b6b70;--rule:#e4e1da;--accent:#b4501c;--panel:#f1eee7;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#121214;--fg:#ececee;--muted:#9a9aa2;--rule:#2a2a2e;--accent:#ff9b5c;--panel:#1d1d21;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 Georgia,serif}
+.tools{font:15px/1.5 system-ui,sans-serif;background:var(--panel);border-bottom:1px solid var(--rule);padding:18px 22px}
+.tools .in{max-width:720px;margin:0 auto} .tools h1{font-size:18px;margin:0 0 6px} .tools ol{margin:6px 0 10px;padding-left:20px}
+button{font:600 14px system-ui,sans-serif;padding:8px 14px;margin:4px 6px 4px 0;border-radius:8px;border:1px solid var(--rule);background:var(--accent);color:#fff;cursor:pointer}
+button.sec{background:transparent;color:var(--fg)} .ok{color:var(--accent);font-weight:600;margin-left:6px}
+main{max-width:720px;margin:0 auto;padding:30px 22px 80px} #art img{max-width:100%;height:auto} figure{margin:20px 0} figcaption{font-size:15px;color:var(--muted)}
+pre{background:var(--panel);padding:12px;border-radius:6px;white-space:pre-wrap;font-size:14px} blockquote{border-left:3px solid var(--accent);margin:0 0 16px;padding:4px 14px;font:14px/1.55 ui-monospace,Menlo,monospace}
+.ph{background:#fff3cd;color:#5c4400;padding:6px 10px;border-radius:6px;font-family:system-ui,sans-serif}
+.dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:8px 0} .dl a{display:block;font:13px system-ui,sans-serif;color:var(--fg);text-decoration:none} .dl img{width:100%;height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--rule)}
+</style></head><body>
+<div class="tools"><div class="in"><h1>X Article version: How I produce multiple podcasts with Claude</h1>
+<ol><li>Open <a href="https://x.com/compose/articles">x.com/compose/articles</a> and create an article.</li>
+<li>Upload the cover image (5:2) and paste the title.</li>
+<li>Copy the article and paste it into the body. X Articles have no code blocks, so the prompts are already set as quotes.</li>
+<li>X doesn’t paste images: replace each yellow <strong>[ Insert image N here ]</strong> line with image N from below (download them first), then delete the placeholder.</li></ol>
+<button onclick="cp('ttl',this)">Copy title</button><span class="ok"></span>
+<button onclick="cp('art',this)">Copy article</button><span class="ok"></span>
+<p style="margin:10px 0 2px"><strong>Cover (5:2):</strong></p>
+<div class="dl"><a href="https://ofcourseduh.com/videosystem/img/x-cover.png" download="00-cover.png"><img src="https://ofcourseduh.com/videosystem/img/x-cover.png" alt="">Cover</a></div>
+<p style="margin:10px 0 2px"><strong>Images, in order:</strong></p><div class="dl"><a href="https://ofcourseduh.com/videosystem/img/hero-chat.png" download="01-hero-chat.png"><img src="https://ofcourseduh.com/videosystem/img/hero-chat.png" alt="">Image 1</a><a href="https://ofcourseduh.com/videosystem/img/gw-titlecard.jpg" download="02-gw-titlecard.jpg"><img src="https://ofcourseduh.com/videosystem/img/gw-titlecard.jpg" alt="">Image 2</a><a href="https://ofcourseduh.com/videosystem/img/rl-episode.jpg" download="03-rl-episode.jpg"><img src="https://ofcourseduh.com/videosystem/img/rl-episode.jpg" alt="">Image 3</a><a href="https://ofcourseduh.com/videosystem/img/rl-short.jpg" download="04-rl-short.jpg"><img src="https://ofcourseduh.com/videosystem/img/rl-short.jpg" alt="">Image 4</a><a href="https://ofcourseduh.com/videosystem/img/gw-short.jpg" download="05-gw-short.jpg"><img src="https://ofcourseduh.com/videosystem/img/gw-short.jpg" alt="">Image 5</a><a href="https://ofcourseduh.com/videosystem/img/cutcannon-qa-sheet.jpg" download="06-cutcannon-qa-sheet.jpg"><img src="https://ofcourseduh.com/videosystem/img/cutcannon-qa-sheet.jpg" alt="">Image 6</a><a href="https://ofcourseduh.com/videosystem/img/review-page.jpg" download="07-review-page.jpg"><img src="https://ofcourseduh.com/videosystem/img/review-page.jpg" alt="">Image 7</a></div></div></div>
+<main><div id="ttl" style="display:none">How I produce multiple podcasts with Claude</div><div id="art"><p class="ph"><strong>[ Insert image 1 here ]</strong></p>
+<p><em>A real exchange from my chat: one message starts four episodes and 20 shorts on the editing machine.</em></p>
+
+
+<p>I produce several podcasts: two that I host, <a href="https://www.remotelylocal.com/@remotelylocal">Remotely Local</a> and Agentically Mine, plus some shows I help friends with, like <a href="https://gigsandwigs.com/">Gigs and Wigs</a>. Each one gets a full YouTube episode and a set of vertical shorts, and all the episodes are hosted on <a href="https://castopod.org/">Castopod</a>, a Podcasting 2.0 platform. With AI and a dedicated headless computer, the whole workflow is now automated.</p>
+<p>This is the exact workflow, step by step, with the prompts I actually use, so you can copy it. It works for one show, and it scales to many because every show runs through the same pipeline with its own brief.</p>
+<p>Special kudos to <a href="https://x.com/mycal_1">@mycal_1</a> (my co-founder for three different startups), who really is the brains behind the software stack that runs on the machine and maintains the <a href="https://github.com/lowerpower/cutcannon">CutCannon repo</a>!</p>
+
+<h2>What you need</h2>
+<ul>
+<li><strong>One machine with a GPU and lots of storage.</strong> Mine is a Linux box with an NVIDIA RTX 4070 Super. Raw multi-camera footage adds up fast, so plan for terabytes. An Apple Silicon Mac mini also works.</li>
+<li><strong>Claude Code</strong> on that machine. It does the actual editing work.</li>
+<li><strong><a href="https://github.com/browser-use/video-use">video-use</a></strong>, an open-source Claude Code skill for editing long-form video from a brief.</li>
+<li><strong><a href="https://github.com/lowerpower/cutcannon">CutCannon</a></strong>, an open-source toolkit for vertical shorts (more on it in Step 6).</li>
+<li><strong>ffmpeg</strong> and a transcription model. Both tools use them under the hood.</li>
+<li><strong>A way to drive the machine remotely.</strong> I run everything from Claude chat on my laptop or phone. The machine is on my noBGP network, so Claude can run commands and read files on it. SSH or any remote-access setup you already trust will do the same job.</li>
+</ul>
+<p>No cloud render service, and the footage never leaves the box.</p>
+
+<h2>Step 1: One folder per show</h2>
+<p>Give every show its own folder, and every client its own folder tree. Inside each show:</p>
+<ul>
+<li>A folder per episode with the raw camera files and the multitrack audio</li>
+<li>A production folder with the show’s brief, brand assets and a status file</li>
+<li>An output folder for edits, shorts and review pages</li>
+</ul>
+<p>This matters more with several shows than you’d think. Claude reads the folder it’s pointed at, so a clean tree means one show’s style never leaks into another’s.</p>
+
+<h2>Step 2: Write a style brief per show</h2>
+<p>The brief is the most important file in the whole setup. It’s a markdown file that tells Claude how this show is edited.</p>
+<p>For an existing show, don’t write it by hand. Give Claude links to your published episodes and let it study them.</p>
+<p><strong>Prompt: learn an existing show’s style</strong></p>
+<blockquote>Here are the published episodes of my show: [YouTube links].<br>Download them and study how they're edited: how much is cut,<br>how often the shot changes, the intro and outro, lower-thirds,<br>captions, loudness and chapters. Write the house style into<br>BRIEF.md in the show's production folder. Don't edit anything yet.</blockquote>
+<p>For a new show with no back catalog, start with a brand kit and refine the brief after the first episode. That’s how Gigs and Wigs started.</p>
+<p><strong>Prompt: brand kit for a new show</strong></p>
+<blockquote>This is a new podcast called [name], hosted by [host] and [host].<br>Make a brand kit: three logo directions, a color palette, a short<br>intro, an end card and lower-thirds. Put them on a review page<br>for me before you use any of them in an edit.</blockquote>
+<p class="ph"><strong>[ Insert image 2 here ]</strong></p>
+<p><em>Gigs and Wigs title card from the brand kit, as it opens each episode.</em></p>
+
+<p>Each brief also lists the fixed things: hosts’ names and spellings, the intro to use, and what must never be changed.</p>
+
+<h2>Step 3: Sync cameras and audio</h2>
+<p>Camera files and a separate audio recorder (I use a RØDECaster) never start at the same moment. In one of my sessions the audio ran about 19 seconds longer than the camera file.</p>
+<p>Ask Claude to line every camera up to the audio by matching the waveforms, and to write the offsets down. It also catches problems you’d otherwise find late: a camera file that belongs to a different episode, a duplicate copy, or a guest whose video was never recorded.</p>
+<p>Do the sync once per episode. Both the long-form edit and the shorts reuse it.</p>
+
+<h2>Step 4: Edit the long-form episode</h2>
+<p>Run Claude Code with <a href="https://github.com/browser-use/video-use">video-use</a> in the episode folder and point it at the show’s brief. A first pass on a 30-minute episode is a single prompt.</p>
+<p><strong>Prompt: edit an episode (sent from Claude chat)</strong></p>
+<blockquote>New Remotely Local episode in /videos/remotely-local/backstory:<br>two cameras plus the RØDECaster multitrack. Use video-use with<br>the show's BRIEF.md. Sync both cameras to the Stereo Mix,<br>transcribe only the mix, and edit end to end without stopping<br>for approval. Output edit/final.mp4, chapters.txt, a YouTube<br>description, and edit-notes.md with a NEEDS HUMAN CHECK list at<br>the top. Run it headless on the machine and tell me when it's done.</blockquote>
+<p>The heavy lifting lives in the brief. Here’s the core of mine, trimmed:</p>
+<p><strong>Excerpt: BRIEF.md</strong></p>
+<blockquote>## Editorial<br>- KEEP the hosts' commentary, asides and opinions. Only cut host<br>  material that is pure logistics, crosstalk or a restart.<br>- Trim filler at word level ("um, you know", false starts) and hide<br>  each trim with an angle change or b-roll. No visible jump cuts.<br>- Cut pre/post-show chatter. End on the last real line of the outro.<br><br>## Multicam<br>- Hard cuts. Stay on the speaker; no reaction cutaways mid-answer.<br>- Side-by-side banter: 50/50 split, each camera center-cropped.<br>- Shortest shot ~2 s, average around 10–12 s.<br><br>## Graphics<br>- Intro wordmark, house lower-thirds (~3 s), end card.<br>- No burned-in captions on the long-form.<br><br>## Audio / output<br>- -14 LUFS integrated, true peak ≤ -1 dBTP.<br>- 1920x1080 H.264 → edit/final.mp4, plus a small preview.mp4.</blockquote>
+<p>What it does with that brief:</p>
+<ul>
+<li>Trims filler and false starts at the word level, not just long pauses</li>
+<li>Switches cameras on whoever is talking, with 50/50 splits for banter</li>
+<li>Adds b-roll, lower-thirds, intro, end card and chapters</li>
+<li>Works with whatever cameras exist: three angles, or one camera with punch-ins</li>
+</ul>
+<p class="ph"><strong>[ Insert image 3 here ]</strong></p>
+<p><em>Remotely Local, from Claude’s edit: the house lower-third goes on each person’s first shot.</em></p>
+
+<p>Compare the first cut against an episode you edited by hand. My first one was too clean, so the brief now says to keep the host asides and commentary. That’s the personality of the show.</p>
+<p>For revisions, don’t re-prompt from scratch. Write each round of notes as a numbered addendum file and have Claude apply it. You get a clear history of every change, and you can re-run any of them.</p>
+<p><strong>Prompt: a revision as an addendum</strong></p>
+<blockquote>Write ADDENDUM-2 for Gigs and Wigs episode 1 and apply it:<br>- Use intro D as-is.<br>- Handle the crew visible in the salon mirror with cuts or zooms<br>  only. No patches or blurs, and never alter the hosts.<br>- Keep the current final as final-pre-add2.mp4 before re-rendering.</blockquote>
+
+<h2>Step 5: Clean up the audio</h2>
+<p>Ask for a few treatment samples instead of one fix. My room had a 120 Hz hum and low rumble, so Claude rendered three options (hum notch, light noise reduction, limiter in different strengths). I listened and picked one, and it went into the brief as the default chain.</p>
+<p><strong>Prompt: audio options</strong></p>
+<blockquote>The mix has a hum and some low rumble. Make three 30-second<br>samples from the same passage with different treatments, from<br>light to strong, and put them on a page so I can A/B them.</blockquote>
+<p>Two things to check every time:</p>
+<ul>
+<li><strong>Sync after processing.</strong> Some noise-reduction filters add a few milliseconds of delay. Mine added about 26 ms, enough to make lips look off. Have Claude measure and correct it.</li>
+<li><strong>Individual mics.</strong> On one episode, one mic was about 15 dB noisier than the rest. Rebuilding the mix from the separate mic tracks, with that one gated, fixed it.</li>
+</ul>
+
+<h2>Step 6: Cut the shorts with CutCannon</h2>
+<p><a href="https://github.com/lowerpower/cutcannon">CutCannon</a> is an open-source toolkit that turns a recording into finished vertical clips on your own GPU machine. You drive it in plain English from Claude: Claude chat reaching the machine remotely, or Claude Code running on it. It ships two Claude skills, an editor and an idea picker, comes with a look per show (brands), and writes the social media copy for every short. Nothing in it uploads or posts.</p>
+<p class="ph"><strong>[ Insert image 4 here ]</strong></p>
+<p class="ph"><strong>[ Insert image 5 here ]</strong></p>
+
+<p><em>Two of the brands that ship with CutCannon: terminal for Remotely Local, gold for Gigs and Wigs.</em></p>
+
+<h3>How it works</h3>
+<ol>
+<li><strong>Transcribe.</strong> Whisper on the GPU gives sentence lines with word timings. Fillers stay visible as (um) so they can be cut precisely.</li>
+<li><strong>Plan.</strong> Claude reads the transcript and writes an edit plan: which lines make each clip, the hook text, whose face to follow. Plans are versioned (v001, v002…) and never overwritten, so “undo” is just a pointer.</li>
+<li><strong>Render.</strong> Tightens fillers and pauses, crops to 1080×1920 following the speaker through camera switches, burns in word-by-word captions and a hook card, and loudness-normalizes to −14 LUFS.</li>
+<li><strong>QA.</strong> Every render gets checked automatically: A/V sync, duration, color, loudness, caption coverage, the hook card, leftover fillers (it re-transcribes the output), joins (words clipped or doubled at a cut) and framing. That’s nine checks, plus a contact sheet for each render.</li>
+<li><strong>Post kit.</strong> For every short it writes a _post.md with the title, description and hashtags for YouTube Shorts, TikTok and Instagram Reels, plus a cover image and a caption file.</li>
+</ol>
+<p>A plan is a small JSON file, which is why it’s easy for Claude to write and for you to read:</p>
+<blockquote>{ "shorts": [{<br>    "id": "s1",<br>    "hook_text": "AI gave my work to someone else",<br>    "clips": [<br>      { "from": "L148", "to": "L152", "track": "left" }<br>    ],<br>    "word_fixes": { "remote it": "remote.it" }<br>}]}</blockquote>
+<p class="ph"><strong>[ Insert image 6 here ]</strong></p>
+<p><em>The QA contact sheet CutCannon makes for every render: five frames across the clip, so you can check framing and captions at a glance.</em></p>
+
+<p>Install is three lines; setup.sh picks the right backend (CUDA on Linux, Metal on Apple Silicon) and installs the two skills:</p>
+<blockquote>git clone https://github.com/lowerpower/cutcannon.git<br>cd cutcannon<br>./setup.sh</blockquote>
+
+<h3>Prompts: one episode, interactively</h3>
+<p>This is the back-and-forth when I want to be hands-on. Each message is a chat turn:</p>
+<blockquote>Recommend 5 clips from remotelylocal-backstory.<br>→ Generate the first one.<br>→ Open on the second story and lose the last sentence.<br>→ Undo that.<br>→ Approve s1.<br>→ Write the post kit for s1.</blockquote>
+<p>If you just say “Let’s make some clips,” it asks which project, shorts or cleanup, and how many (or “auto” to propose as many as the material supports). It always proposes before rendering.</p>
+
+<h3>Prompt: a brand per show</h3>
+<blockquote>Create a CutCannon brand for Remotely Local from the show's look:<br>the typed-terminal wordmark from the intro, a monospace hook card,<br>and clean sans captions with the highlight color from our<br>lower-third.</blockquote>
+<p>A brand is a small brand.json: caption font, colors, the highlight on the spoken word, and the hook card. CutCannon ships two, terminal and gold, and Claude shows you a preview still before you use a new one.</p>
+
+<h3>Prompt: every new episode, headless</h3>
+<blockquote>Make shorts for the three new Remotely Local episodes, headless.<br>Copy each episode's final.mp4 into its own CutCannon project.<br>- 5 vertical clips per episode, 20–60 s, strongest hooks first,<br>  each one self-contained.<br>- Use the remotelylocal brand. Captions, 2.5 s hook card,<br>  speaker-tracking crop, fillers removed, -14 LUFS.<br>- Name fixes: Ryo Koyama, Mike Johnson, remote.it, noBGP, plus<br>  any guest names the edit notes confirm.<br>- Run QA on every render. Build a review page with all 15.<br>- Write the post kit for each short.<br>- Don't upload, post or approve anything.</blockquote>
+<p>Also give each show a name-fix list. Transcription misspells names constantly, and it’s the most visible error in a short.</p>
+
+<h2>Step 7: Review on a simple web page</h2>
+<p>Have Claude build a small review page for each batch: every render with a player, the clip’s title and hook, suggested captions, and a short “needs a human check” list.</p>
+<p class="ph"><strong>[ Insert image 7 here ]</strong></p>
+<p><em>The shorts review page for one Remotely Local episode. I reply with clip codes (“B-2: trim the first sentence”) and they become the next revision.</em></p>
+
+<p>Serve it from the editing machine and open it from anywhere. I publish mine through noBGP, which gives the page a private link without opening a port on my network, and watch on my phone. remote.it or SSH port forwarding work too. For client shows, a password-protected review page lets the hosts watch drafts without downloading anything.</p>
+
+<h2>Step 8: Queue every show overnight</h2>
+<p>With several shows, this is where the time comes back. Before bed, I tell Claude what’s next and it writes a queue script on the machine. The script runs headless Claude Code jobs one after another.</p>
+<p><strong>Prompt: overnight queue</strong></p>
+<blockquote>Set up an overnight queue on the editing machine, one job after<br>another, each with a timeout and its own log:<br>1. Re-cut the Backstory episode with the second camera that<br>   just arrived.<br>2. Edit the Music and BatFast episodes.<br>3. Make shorts for all three.<br>4. Wait for the client's footage upload to finish, then apply<br>   ADDENDUM-9 to Gigs and Wigs.<br>Write a line to OVERNIGHT-STATUS.md as each job starts and ends.<br>Launch it detached so it survives a dropped connection.<br>Nothing gets uploaded.</blockquote>
+<p>Ask Claude to launch the queue detached (noBGP’s detach option, or setsid/nohup over SSH) so it keeps running if the connection drops. Then pick the chat up from your phone in the morning and ask how the night went. The answer comes from that status file.</p>
+
+<h2>Step 9: Publish by hand</h2>
+<p>Nothing uploads, posts or approves itself. Every brief ends with that line, and it’s the one rule I’d keep no matter what.</p>
+<p>Once I approve, publishing per show looks like:</p>
+<ul>
+<li>Full episode to YouTube (I upload client drafts as unlisted first)</li>
+<li>Audio to the podcast feed (I use Castopod, which feeds Apple and Spotify)</li>
+<li>Episodes embedded on the show’s website</li>
+<li>Shorts posted to each platform, with the title, description and hashtags from each short’s _post.md</li>
+</ul>
+
+<h2>Tips</h2>
+<ul>
+<li><strong>Make every correction permanent.</strong> When you fix something, put it in the brief, not just this episode. The edits get better every week.</li>
+<li><strong>Write “never touch” rules.</strong> On one client show, people in a salon mirror had to be removed. The rule was: least intrusive fix first (reframe, then patch, then blur), and never alter the hosts.</li>
+<li><strong>Ask for a NEEDS HUMAN CHECK list.</strong> Uncertain name spellings, guessed titles and odd cuts go at the top of the edit notes, so you know exactly what to watch.</li>
+<li><strong>Keep the old render.</strong> Save the previous final before each revision, so you can always go back.</li>
+<li><strong>Expect missing footage.</strong> Remote guests often have no video recorded. Decide early whether that episode is audio-only or uses the call recording.</li>
+<li><strong>Start with one show.</strong> Get one brief right, then copy the structure for the next.</li>
+</ul>
+<p>The hours of syncing, cutting, captioning and rendering are gone. What’s left is the part I actually like: choosing what goes out.</p>
+<p>CutCannon: <a href="https://github.com/lowerpower/cutcannon">github.com/lowerpower/cutcannon</a><br>video-use: <a href="https://github.com/browser-use/video-use">github.com/browser-use/video-use</a></p></div></main>
+<script>
+async function cp(id,btn){const el=document.getElementById(id);const h=el.innerHTML,t=el.innerText;
+try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([t],{type:'text/plain'})})]);}
+catch(e){el.style.display='block';const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();if(id==='ttl')el.style.display='none';}
+const o=btn.nextElementSibling;o.textContent='Copied';setTimeout(()=>o.textContent='',2500);}
+</script></body></html>
