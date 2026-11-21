@@ -61,9 +61,30 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font:14
 <li><strong><a href="https://github.com/browser-use/video-use">video-use</a></strong>, an open-source Claude Code skill for editing long-form video from a brief.</li>
 <li><strong><a href="https://github.com/lowerpower/cutcannon">CutCannon</a></strong>, an open-source toolkit for vertical shorts (more on it in Step 6).</li>
 <li><strong>ffmpeg</strong> and a transcription model. Both tools use them under the hood.</li>
-<li><strong>A way to drive the machine remotely.</strong> I run everything from Claude chat on my laptop or phone. The machine is on my noBGP network, so Claude can run commands and read files on it. SSH or any remote-access setup you already trust will do the same job.</li>
+<li><strong>A way to drive the machine remotely.</strong> I run everything from Claude chat on my laptop or phone. The machine is on my noBGP network, so Claude can run commands and read files on it. Note: noBGP is my project, and although I’d love it if you gave <a href="https://nobgp.com">noBGP</a> a try, any SSH or remote-access setup you already trust will do the same job.</li>
 </ul>
 <p>No cloud render service, and the footage never leaves the box.</p>
+
+<h2>My podcast setup</h2>
+<p>Here’s the gear behind the shows. Nothing exotic: the trick is that every file ends up in one place, where Claude can work on it.</p>
+<h3>Recording</h3>
+<ul>
+<li><strong>Main camera:</strong> Leica SL3, recording Apple ProRes 422 HQ at 1080p.</li>
+<li><strong>Additional cameras:</strong> Canon EOS R10, recording 1080p, and a Canon XC15.</li>
+<li><strong>B-roll and photos:</strong> iPhone 16 Pro Max.</li>
+<li><strong>Audio:</strong> RØDECaster Pro II, recording one track per mic plus a stereo mix, at 48 kHz.</li>
+<li><strong>Mics:</strong> various RØDE mics.</li>
+<li><strong>Remote guests:</strong> Zoom, using its cloud recording for the guest’s video. For these, I usually use a real camera for my own feed, ask the guest to record themselves directly with QuickTime if they have a Mac, and/or pin their feed at the highest resolution and record it directly on my Mac.</li>
+</ul>
+<h3>Editing</h3>
+<ul>
+<li><strong>The editing machine:</strong> a headless Linux box with an AMD Ryzen CPU, an NVIDIA RTX 4070 Super and a 4 TB NVMe drive just for footage.</li>
+<li><strong>Software:</strong> Claude Code, video-use, CutCannon and ffmpeg.</li>
+</ul>
+<h3>Publishing</h3>
+<ul>
+<li>YouTube for full episodes and shorts, Castopod for the podcast feed, and a simple website per show.</li>
+</ul>
 
 <h2>Step 1: One folder per show</h2>
 <p>Give every show its own folder, and every client its own folder tree. Inside each show:</p>
