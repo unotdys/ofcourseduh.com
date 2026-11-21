@@ -247,6 +247,30 @@ Nothing gets uploaded.</code></pre>
 <li>Shorts posted to each platform, with the title, description and hashtags from each short’s <code>_post.md</code></li>
 </ul>
 
+<h3>The audio feed: Castopod</h3>
+<p>Every show’s audio lives on <a href="https://castopod.org/">Castopod</a>, a self-hosted Podcasting 2.0 server, and Apple, Spotify and Podcast Index all read its feed. Each show gets its own install: Remotely Local runs at remotelylocal.com, and Gigs and Wigs gets a separate server so client shows never share an admin.</p>
+<p>I don’t upload to Castopod by hand anymore. Once an episode is approved, Claude builds the whole package from the edit and files it as a draft:</p>
+<ul>
+<li><strong>Audio:</strong> A 128 kbps MP3 encoded from the exact file that went to YouTube, so audio and video always match</li>
+<li><strong>Transcript:</strong> A VTT file with speaker names, mapped from the edit’s word timings onto the final cut. No second transcription, and Claude checks that the words line up with speech in the MP3</li>
+<li><strong>Chapters:</strong> A chapters JSON with the same titles and timestamps as the YouTube chapters</li>
+<li><strong>Cover:</strong> A 3000×3000 episode cover in the show’s style: logo, title, guest cutout, one story graphic</li>
+<li><strong>Description:</strong> The show’s pattern: a hook line, a short summary, the chapter list, then links</li>
+<li><strong>Persons:</strong> Hosts and guests with roles, a photo and a profile link (LinkedIn works well)</li>
+</ul>
+<p>The episode lands in Castopod as an unpublished draft. I listen, check the cover and press Publish myself.</p>
+<p><strong>Prompt: package approved episodes for Castopod</strong></p>
+<pre><code>These episodes are approved: &lt;list&gt;. For each one, build the Castopod package in its publish/ folder: a 128 kbps MP3 from the YouTube master, a VTT transcript with speaker names timed to the final cut, chapters.json matching the YouTube chapters, a 3000x3000 cover in the style of our published covers, and a description in the same pattern as our last published episode. Then create each episode in Castopod as a draft with the persons attached. Don't publish anything.</code></pre>
+<p>Before anything goes public, I have Claude Code cross-check the YouTube descriptions against the Castopod ones. It reads the public video data only, compares titles, chapters, spellings and links, and writes a report. The first run caught a misspelled product name, a chapter list pasted twice, and missing links on all four videos.</p>
+<p>A few things I’d set up once per show:</p>
+<ul>
+<li><strong>Pick one transcript format.</strong> I use VTT everywhere; mixing VTT and SRT across episodes works, but looks sloppy in the feed.</li>
+<li><strong>Keep roles consistent.</strong> Decide who is Host and who is Guest, and stick to it, including for a co-host’s solo episodes.</li>
+<li><strong>Set the show-level fields.</strong> Parental advisory, copyright and owner email. Apple flags a missing explicit setting.</li>
+<li><strong>Never rename a published slug.</strong> It breaks every link already shared. Pick a short slug style for new episodes instead.</li>
+<li><strong>Save a copy before replacing a file.</strong> Castopod won’t overwrite a transcript; you delete the old one first, so keep the file somewhere safe until the new one is in.</li>
+</ul>
+
 <h2>Tips</h2>
 <ul>
 <li><strong>Make every correction permanent.</strong> When you fix something, put it in the brief, not just this episode. The edits get better every week.</li>
