@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Downtown Palo Alto, 1900 to today</title>
+<meta name="description" content="Slide through time to see which stores, theaters and offices stood in downtown Palo Alto from 1900 to today.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#F3EEE3; --dim:#B9B3A6; --panel:#1C2629; --panel2:#243135; --line:#3A4A4F;
+  --retail:#EBC55A; --food:#E58C8C; --entertainment:#9DB8E0; --tech:#8FD1A8; --hotel:#C9A6E0; --landmark:#E6E1D6;
+  --display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--panel);color:var(--ink);font:15px/1.45 var(--body)}
+#app{display:grid;grid-template-rows:auto 1fr;height:100%}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 18px 12px;display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:end;z-index:1000}
+.title h1{margin:0;font:600 15px/1.2 var(--body);color:var(--dim)}
+.year{font:800 72px/0.85 var(--display);letter-spacing:.01em;color:var(--ink);font-variant-numeric:tabular-nums}
+.ctrl{display:flex;gap:12px;align-items:center}
+button{font:600 14px var(--body);color:var(--panel);background:var(--retail);border:0;border-radius:999px;padding:8px 16px;cursor:pointer;white-space:nowrap}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,.item:focus-visible,.chip:focus-visible{outline:2px solid var(--retail);outline-offset:2px}
+.scale{position:relative;flex:1;min-width:0}
+#hist{display:block;width:100%;height:34px}
+input[type=range]{width:100%;margin:0;appearance:none;-webkit-appearance:none;background:transparent;height:22px}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:var(--line);border-radius:2px}
+input[type=range]::-moz-range-track{height:4px;background:var(--line);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;background:var(--ink);border:3px solid var(--retail)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--retail)}
+.ticks{position:relative;height:16px;font:600 12px var(--display);letter-spacing:.04em;color:var(--dim)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+main{position:relative;display:grid;grid-template-columns:1fr 340px;min-height:0}
+#map{height:100%;background:#0f1416}
+aside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.ahead{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.ahead h2{margin:0 0 8px;font:600 16px/1.3 var(--body)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 12px var(--body);color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.chip[aria-pressed=false]{opacity:.4}
+#list{list-style:none;margin:0;padding:6px 0;overflow:auto;flex:1}
+.item{display:grid;grid-template-columns:12px 1fr;gap:10px;padding:9px 16px;cursor:pointer;border-left:3px solid transparent}
+.item:hover{background:var(--panel2)}
+.item.new{border-left-color:var(--retail)}
+.item i{width:10px;height:10px;border-radius:50%;margin-top:5px}
+.item b{font-weight:600;display:block}
+.item small{color:var(--dim);font-size:13px}
+.empty{padding:16px;color:var(--dim)}
+.foot{padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:12px;color:var(--dim)}
+.foot a{color:var(--ink)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--panel);color:var(--ink);border-radius:6px}
+.leaflet-popup-content{margin:12px 14px;font:14px/1.45 var(--body);max-width:260px}
+.pop h3{margin:0 0 2px;font:600 16px/1.25 var(--body)}
+.pop .yrs{font:800 20px var(--display);letter-spacing:.02em}
+.pop .addr{color:var(--dim);font-size:13px;margin-bottom:6px}
+.pop .est{font-size:12px;color:var(--dim)}
+.leaflet-container a.leaflet-popup-close-button{color:var(--dim)}
+.leaflet-tooltip.lbl{background:rgba(28,38,41,.88);color:var(--ink);border:0;box-shadow:none;font:600 12px var(--body);padding:2px 6px}
+.leaflet-tooltip.lbl::before{display:none}
+@media (max-width:760px){
+  header{grid-template-columns:1fr;padding-left:12px;padding-right:12px}
+  .year{font-size:54px}
+  main{grid-template-columns:1fr;grid-template-rows:1fr 38%}
+  aside{border-left:0;border-top:1px solid var(--line)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="title"><h1>Downtown Palo Alto</h1><div class="year" id="year" aria-live="polite">1925</div></div>
+  <div class="ctrl">
+    <button id="play" aria-label="Play through the years">Play</button>
+    <div class="scale">
+      <canvas id="hist" aria-hidden="true"></canvas>
+      <input id="slider" type="range" min="1900" max="2026" step="1" value="1925" aria-label="Year">
+      <div class="ticks" id="ticks"></div>
+    </div>
+  </div>
+</header>
+<main>
+  <div id="map" role="region" aria-label="Satellite map of downtown Palo Alto"></div>
+  <aside>
+    <div class="ahead">
+      <h2 id="count">Open in 1925</h2>
+      <div class="chips" id="chips"></div>
+    </div>
+    <ul id="list"></ul>
+    <div class="foot">Years with ~ are estimates. The satellite photo shows downtown today. Know a store that's missing, or a better date? Tell <a href="https://x.com/ofcourseduh">@ofcourseduh</a>.</div>
+  </aside>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const NOW = new Date().getFullYear();
+const CATS = {retail:"Shops",food:"Food & drink",entertainment:"Theaters",tech:"Startups",hotel:"Hotels",landmark:"Landmarks"};
+const color = c => getComputedStyle(document.documentElement).getPropertyValue("--"+c).trim();
+const on = Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
+const $ = id => document.getElementById(id);
+const slider=$("slider"); slider.max = NOW;
+
+const map = L.map("map",{zoomControl:true,maxZoom:20}).setView([37.4459,-122.1615],17);
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {maxNativeZoom:19,maxZoom:20,attribution:"Imagery &copy; Esri, Maxar, Earthstar Geographics"}).addTo(map);
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}",
+  {maxNativeZoom:19,maxZoom:20,opacity:.7}).addTo(map);
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+  {maxNativeZoom:19,maxZoom:20,opacity:.8}).addTo(map);
+
+let stores=[], layer=L.layerGroup().addTo(map), markers=new Map();
+const endYear = s => s.end ?? NOW;
+const yrs = s => `${s.approx?"~":""}${s.start}–${s.end ?? "today"}`;
+const esc = t => String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function ticks(){
+  const t=$("ticks"); t.innerHTML="";
+  for(let y=1900;y<=NOW;y+=10){ const s=document.createElement("span");
+    s.style.left=((y-1900)/(NOW-1900)*100)+"%"; s.textContent=y; t.appendChild(s); }
+}
+function hist(){
+  const c=$("hist"), dpr=devicePixelRatio||1, w=c.clientWidth, h=c.clientHeight;
+  c.width=w*dpr; c.height=h*dpr; const g=c.getContext("2d"); g.scale(dpr,dpr);
+  const counts=[]; for(let y=1900;y<=NOW;y++) counts.push(stores.filter(s=>on[s.category]&&s.start<=y&&endYear(s)>=y).length);
+  const max=Math.max(1,...counts), bw=w/counts.length, cur=+slider.value-1900;
+  counts.forEach((n,i)=>{ g.fillStyle = i===cur ? color("retail") : "rgba(243,238,227,.22)";
+    const bh=Math.max(n?2:0, n/max*(h-2)); g.fillRect(i*bw, h-bh, Math.max(1,bw-1), bh); });
+}
+function popup(s){
+  return `<div class="pop"><h3>${esc(s.name)}</h3><div class="yrs">${yrs(s)}</div><div class="addr">${esc(s.address)}</div>${esc(s.note)}${s.approx?'<div class="est">~ Dates are estimates.</div>':""}</div>`;
+}
+function render(){
+  const y=+slider.value; $("year").textContent=y; $("count").textContent="";
+  const open=stores.filter(s=>on[s.category]&&s.start<=y&&endYear(s)>=y);
+  $("count").textContent = `Open in ${y}: ${open.length}`;
+  layer.clearLayers(); markers.clear();
+  const byAddr={};
+  open.forEach(s=>{ const k=s.address, i=(byAddr[k]=(byAddr[k]||0)+1)-1;
+    const ll=[s.lat - i*0.00004, s.lng + i*0.00005];
+    const m=L.circleMarker(ll,{radius:s.start===y?11:8,color:"#1C2629",weight:2,fillColor:color(s.category),fillOpacity:.95})
+      .bindPopup(popup(s)).bindTooltip(s.name,{className:"lbl",direction:"right",offset:[8,0],permanent:map.getZoom()>=18});
+    m.addTo(layer); markers.set(s,m);
+  });
+  const ul=$("list"); ul.innerHTML="";
+  if(!open.length){ ul.innerHTML=`<li class="empty">Nothing on the map for ${y} yet. Slide forward, or turn more categories on.</li>`; }
+  open.sort((a,b)=>a.start-b.start).forEach(s=>{
+    const li=document.createElement("li"); li.className="item"+(s.start===y?" new":""); li.tabIndex=0;
+    li.innerHTML=`<i style="background:${color(s.category)}"></i><div><b>${esc(s.name)}</b><small>${esc(s.address)}, ${yrs(s)}</small></div>`;
+    const go=()=>{ map.flyTo(markers.get(s).getLatLng(),19,{duration:.6}); markers.get(s).openPopup(); };
+    li.onclick=go; li.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();go();} };
+    ul.appendChild(li);
+  });
+  hist();
+  history.replaceState(null,"","#"+y);
+}
+function chips(){
+  const box=$("chips");
+  Object.entries(CATS).forEach(([k,label])=>{
+    const b=document.createElement("button"); b.className="chip"; b.setAttribute("aria-pressed","true");
+    b.innerHTML=`<i style="background:${color(k)}"></i>${label}`;
+    b.onclick=()=>{ on[k]=!on[k]; b.setAttribute("aria-pressed",on[k]); render(); };
+    box.appendChild(b);
+  });
+}
+let timer=null;
+$("play").onclick=()=>{
+  if(timer){ clearInterval(timer); timer=null; $("play").textContent="Play"; return; }
+  if(+slider.value>=NOW) slider.value=1900;
+  $("play").textContent="Pause";
+  timer=setInterval(()=>{ if(+slider.value>=NOW){ $("play").click(); return; } slider.value=+slider.value+1; render(); }, 180);
+};
+slider.oninput=render;
+map.on("zoomend",render);
+addEventListener("resize",hist);
+
+const h=parseInt(location.hash.slice(1)); if(h>=1900&&h<=NOW) slider.value=h;
+ticks(); chips();
+fetch("stores.json").then(r=>r.json()).then(d=>{ stores=d; render(); })
+  .catch(()=>{ $("list").innerHTML='<li class="empty">The store list didn’t load. Reload the page to try again.</li>'; });
+</script>
+</body>
+</html>
