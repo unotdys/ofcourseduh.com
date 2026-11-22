@@ -81,6 +81,19 @@ json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "st
 print(f"{len(out)} entries written; not geocoded: {missing}")
 
 # ---------------------------------------------------------------------------
+# Accepted public suggestions (written by /root/dpa-review/review.py after verification).
+SUG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "suggestions_applied.json")
+sug = json.load(open(SUG)) if os.path.exists(SUG) else {"additions": [], "corrections": []}
+for a in sug.get("additions", []):
+    ll = geocode(a["address"])
+    if not ll: missing.append(a["address"]); continue
+    rec = {"name": a["name"], "address": a["address"], "start": a.get("start") or CUR, "end": a.get("end"),
+           "category": a.get("category", "retail"), "approx": bool(a.get("approx")), "note": a.get("note", ""),
+           "lat": ll[0], "lng": ll[1], "source": "suggestion"}
+    if not a.get("start"): rec["start_unknown"] = True
+    out.append(rec)
+
+# ---------------------------------------------------------------------------
 # Current businesses from OpenStreetMap (osm_current.json, fetched via Overpass).
 # OSM has no opening years, so these get start=CUR and start_unknown=True.
 # Refresh: re-run the Overpass query in osm_query.txt, save as osm_current.json.
@@ -146,3 +159,19 @@ if os.path.exists(OSM):
         added += 1
     json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "stores.json"), "w"), indent=1)
     print(f"OpenStreetMap: {added} current places added, {merged} merged with existing entries; total {len(out)}")
+
+# ---------------------------------------------------------------------------
+# Accepted corrections to existing entries (match by name, and address if given).
+fixed = 0
+for c in sug.get("corrections", []):
+    hits = [x for x in out if x["name"].lower() == c["target"].lower() and (not c.get("target_address") or x["address"] == c["target_address"])]
+    for x in hits:
+        for k in ("name", "start", "end", "category", "note", "approx"):
+            if k in c.get("fields", {}): x[k] = c["fields"][k]
+        if "start" in c.get("fields", {}) and c["fields"]["start"]: x.pop("start_unknown", None)
+        if c.get("fields", {}).get("address") and c["fields"]["address"] != x["address"]:
+            ll = geocode(c["fields"]["address"])
+            if ll: x["address"], x["lat"], x["lng"] = c["fields"]["address"], ll[0], ll[1]
+        fixed += 1
+json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "stores.json"), "w"), indent=1)
+print(f"Suggestions: {len(sug.get('additions', []))} additions, {fixed} corrections applied; total {len(out)}")
