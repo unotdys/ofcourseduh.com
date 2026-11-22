@@ -341,6 +341,17 @@
   "lng": -122.1638155
  },
  {
+  "name": "Pizza A Go-Go",
+  "address": "220 University Ave",
+  "start": 1988,
+  "end": 2007,
+  "category": "food",
+  "approx": true,
+  "note": "Pizza by the slice, open late on weekends. Business records give 1988 as its start; it later moved to 335 University Ave.",
+  "lat": 37.4448291,
+  "lng": -122.1623137
+ },
+ {
   "name": "Palo Alto Post Office",
   "address": "380 Hamilton Ave",
   "start": 1932,

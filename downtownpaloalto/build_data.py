@@ -39,6 +39,7 @@ STORES = [
   ("Coupa Cafe", "538 Ramona St", 2004, None, "food", True, "Venezuelan cafe, a startup meeting spot."),
   ("Il Fornaio", "520 Cowper St", 1987, None, "food", True, "In the Garden Court Hotel."),
   ("Evvia Estiatorio", "420 Emerson St", 1995, None, "food", True, "Greek restaurant."),
+  ("Pizza A Go-Go", "220 University Ave", 1988, 2007, "food", True, "Pizza by the slice, open late on weekends. Business records give 1988 as its start; it later moved to 335 University Ave."),
   ("Palo Alto Post Office", "380 Hamilton Ave", 1932, None, "landmark", True, "Birge Clark's Spanish Colonial post office."),
   ("Palo Alto Depot", "95 University Ave", 1941, None, "landmark", True, "Streamline Moderne train station (Southern Pacific, now Caltrain)."),
 ]
