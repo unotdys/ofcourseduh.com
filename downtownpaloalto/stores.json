@@ -474,6 +474,17 @@
   "lng": -122.1610435
  },
  {
+  "name": "Aquarius Theatre",
+  "address": "430 Emerson St",
+  "start": 1969,
+  "end": null,
+  "category": "entertainment",
+  "approx": false,
+  "note": "Twin-screen arthouse cinema; opened Oct 1, 1969 with Medium Cool and The Rain People. Run by Landmark Theatres since 1985; renovated in 2015 with larger screens and recliners.",
+  "lat": 37.4449938,
+  "lng": -122.1636799
+ },
+ {
   "name": "Palo Alto Post Office",
   "address": "380 Hamilton Ave",
   "start": 1932,
@@ -2054,19 +2065,6 @@
   "note": "Open today (glaziery). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.4436395,
   "lng": -122.160735
- },
- {
-  "name": "Aquarius Theatre",
-  "address": "430 Emerson St",
-  "start": 2026,
-  "end": null,
-  "category": "entertainment",
-  "approx": false,
-  "start_unknown": true,
-  "source": "osm",
-  "note": "Open today (cinema). Listed in OpenStreetMap; the year it opened isn't known yet.",
-  "lat": 37.4449619,
-  "lng": -122.163711
  },
  {
   "name": "Buca di Beppo",

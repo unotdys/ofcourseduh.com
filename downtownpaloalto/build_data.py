@@ -51,6 +51,7 @@ STORES = [
   ("TAVERNA", "800 Emerson St", 2018, None, "food", False, "Greek restaurant at Emerson & Homer, across from Whole Foods, open since April 2018."),
   ("Gordon Biersch Brewery Restaurant", "640 Emerson St", 1988, 2016, "food", True, "Brewery-restaurant on Emerson; reinvented as Dan Gordon's in 2016."),
   ("Dan Gordon's", "640 Emerson St", 2016, 2022, "food", True, "Dan Gordon's reboot of the Gordon Biersch space; Meyhouse is there now."),
+  ("Aquarius Theatre", "430 Emerson St", 1969, None, "entertainment", False, "Twin-screen arthouse cinema; opened Oct 1, 1969 with Medium Cool and The Rain People. Run by Landmark Theatres since 1985; renovated in 2015 with larger screens and recliners."),
   ("Palo Alto Post Office", "380 Hamilton Ave", 1932, None, "landmark", True, "Birge Clark's Spanish Colonial post office."),
   ("Palo Alto Depot", "95 University Ave", 1941, None, "landmark", True, "Streamline Moderne train station (Southern Pacific, now Caltrain)."),
 ]
