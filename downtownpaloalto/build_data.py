@@ -47,6 +47,10 @@ STORES = [
   ("Spago Palo Alto", "265 Lytton Ave", 1997, 2009, "food", True, "Wolfgang Puck's Spago took over the Stars space, opening Dec 15, 1997, and lasted about a dozen years."),
   ("Osteria Toscana", "247 Hamilton Ave", 1986, None, "food", False, "Tuscan restaurant on the ground floor of the Cardinal Hotel, at Hamilton & Ramona, since 1986."),
   ("Nobu Palo Alto", "180 Hamilton Ave", 2017, None, "food", True, "Nobu Matsuhisa's restaurant in the Epiphany Hotel."),
+  ("Reach Fitness", "707 High St", None, None, "fitness", False, "Gym on High Street near Homer."),
+  ("TAVERNA", "800 Emerson St", 2018, None, "food", False, "Greek restaurant at Emerson & Homer, across from Whole Foods, open since April 2018."),
+  ("Gordon Biersch Brewery Restaurant", "640 Emerson St", 1988, 2016, "food", True, "Brewery-restaurant on Emerson; reinvented as Dan Gordon's in 2016."),
+  ("Dan Gordon's", "640 Emerson St", 2016, 2022, "food", True, "Dan Gordon's reboot of the Gordon Biersch space; Meyhouse is there now."),
   ("Palo Alto Post Office", "380 Hamilton Ave", 1932, None, "landmark", True, "Birge Clark's Spanish Colonial post office."),
   ("Palo Alto Depot", "95 University Ave", 1941, None, "landmark", True, "Streamline Moderne train station (Southern Pacific, now Caltrain)."),
 ]
@@ -68,8 +72,10 @@ out, missing = [], []
 for name, addr, s, e, cat, approx, note in STORES:
     ll = geocode(addr)
     if not ll: missing.append(addr); continue
-    out.append({"name": name, "address": addr, "start": s, "end": e, "category": cat,
-                "approx": approx, "note": note, "lat": ll[0], "lng": ll[1]})
+    rec = {"name": name, "address": addr, "start": s if s else CUR, "end": e, "category": cat,
+           "approx": approx, "note": note, "lat": ll[0], "lng": ll[1]}
+    if not s: rec["start_unknown"] = True
+    out.append(rec)
 json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "stores.json"), "w"), indent=1)
 print(f"{len(out)} entries written; not geocoded: {missing}")
 
@@ -82,6 +88,7 @@ OSM = os.path.join(os.path.dirname(os.path.abspath(__file__)), "osm_current.json
 FOOD = {"restaurant","cafe","bar","pub","fast_food","ice_cream","bakery","pastry","chocolate","confectionery","tea","food_court","biergarten","coffee","deli","wine","alcohol"}
 ENT = {"cinema","theatre","nightclub"}
 HOTEL = {"hotel","motel","guest_house"}
+FIT = {"fitness_centre","sports_centre","dance","climbing","yoga","pilates","fitness","boxing"}
 SERV = {"bank","hairdresser","beauty","hairdresser;beauty","dry_cleaning","optician","massage","copyshop","laundry","tailor","mobile_phone","pharmacy","chemist","glaziery","travel_agency"}
 SKIP_NAMES = {"Stanford Theater": "Stanford Theatre", "Palo Alto Creamery": "Peninsula Creamery",
               "Graduate by Hilton Palo Alto": "Hotel President", "Apple Store": "Apple Store (current)"}
@@ -114,7 +121,7 @@ if os.path.exists(OSM):
         la = e.get("lat") or e.get("center", {}).get("lat"); ln = e.get("lon") or e.get("center", {}).get("lon")
         if not name or la is None: continue
         x, y = xy(la, ln); along = x * ux + y * uy; perp = -x * uy + y * ux
-        if not (-80 <= along <= L + 200 and abs(perp) <= 270): continue   # downtown: Alma..Middlefield, ~2 blocks each side (Lytton, Hamilton, Forest)
+        if not (-80 <= along <= L + 200 and -420 <= perp <= 270): continue   # downtown: Alma..Middlefield; Lytton side ~2 blocks, south through Homer (Whole Foods)
         if name in SKIP_NAMES: merged += 1; continue
         hn, st = t.get("addr:housenumber", "").split(";")[0], t.get("addr:street", "")
         addr = short(f"{hn} {st}".strip()) if hn and st else reverse(la, ln)
@@ -128,8 +135,8 @@ if os.path.exists(OSM):
         # same name within 40 m in OSM itself (duplicate mapping)
         if any(n == norm(name) and math.hypot(px - x, py - y) < 40 for n, px, py in seen): continue
         seen.append((norm(name), x, y))
-        kind = t.get("amenity") or t.get("tourism") or t.get("shop") or ""
-        cat = "food" if kind in FOOD else "entertainment" if kind in ENT else "hotel" if kind in HOTEL else "services" if kind in SERV else "retail"
+        kind = t.get("amenity") or t.get("tourism") or t.get("leisure") or t.get("shop") or (t.get("sport","").split(";")[0] if t.get("sport") else "")
+        cat = "fitness" if kind in FIT else "food" if kind in FOOD else "entertainment" if kind in ENT else "hotel" if kind in HOTEL else "services" if kind in SERV else "retail"
         label = kind.replace("_", " ").replace(";", ", ")
         out.append({"name": name, "address": addr, "start": CUR, "end": None, "category": cat, "approx": False,
                     "start_unknown": True, "source": "osm",

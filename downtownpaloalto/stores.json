@@ -429,6 +429,51 @@
   "lng": -122.1615453
  },
  {
+  "name": "Reach Fitness",
+  "address": "707 High St",
+  "start": 2026,
+  "end": null,
+  "category": "fitness",
+  "approx": false,
+  "note": "Gym on High Street near Homer.",
+  "lat": 37.4423844,
+  "lng": -122.1602598,
+  "start_unknown": true
+ },
+ {
+  "name": "TAVERNA",
+  "address": "800 Emerson St",
+  "start": 2018,
+  "end": null,
+  "category": "food",
+  "approx": false,
+  "note": "Greek restaurant at Emerson & Homer, across from Whole Foods, open since April 2018.",
+  "lat": 37.4421417,
+  "lng": -122.1590527
+ },
+ {
+  "name": "Gordon Biersch Brewery Restaurant",
+  "address": "640 Emerson St",
+  "start": 1988,
+  "end": 2016,
+  "category": "food",
+  "approx": true,
+  "note": "Brewery-restaurant on Emerson; reinvented as Dan Gordon's in 2016.",
+  "lat": 37.443302,
+  "lng": -122.1610435
+ },
+ {
+  "name": "Dan Gordon's",
+  "address": "640 Emerson St",
+  "start": 2016,
+  "end": 2022,
+  "category": "food",
+  "approx": true,
+  "note": "Dan Gordon's reboot of the Gordon Biersch space; Meyhouse is there now.",
+  "lat": 37.443302,
+  "lng": -122.1610435
+ },
+ {
   "name": "Palo Alto Post Office",
   "address": "380 Hamilton Ave",
   "start": 1932,
@@ -501,6 +546,19 @@
   "note": "Open today (restaurant). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.44551,
   "lng": -122.1601391
+ },
+ {
+  "name": "Peet's Coffee",
+  "address": "near High St",
+  "start": 2026,
+  "end": null,
+  "category": "food",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (cafe). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4419694,
+  "lng": -122.1596908
  },
  {
   "name": "Curry Up Now",
@@ -932,6 +990,19 @@
   "lng": -122.1620151
  },
  {
+  "name": "Mntstudio",
+  "address": "145 Hamilton Ave",
+  "start": 2026,
+  "end": null,
+  "category": "fitness",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (fitness centre). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4434862,
+  "lng": -122.1621842
+ },
+ {
   "name": "Kitchen Nail Bar",
   "address": "540 Emerson St",
   "start": 2026,
@@ -1190,6 +1261,19 @@
   "note": "Open today (art). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.4443234,
   "lng": -122.1613066
+ },
+ {
+  "name": "Skin Spirit",
+  "address": "701 Emerson St",
+  "start": 2026,
+  "end": null,
+  "category": "services",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (beauty). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.443162,
+  "lng": -122.1598572
  },
  {
   "name": "Joe & The Juice",
@@ -1829,6 +1913,19 @@
   "lng": -122.1615331
  },
  {
+  "name": "Dreyfus Properties",
+  "address": "728 Emerson St",
+  "start": 2026,
+  "end": null,
+  "category": "retail",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (estate agent). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4426819,
+  "lng": -122.1599184
+ },
+ {
   "name": "Meyhouse",
   "address": "640 Emerson St",
   "start": 2026,
@@ -1894,6 +1991,19 @@
   "lng": -122.161288
  },
  {
+  "name": "Speedometer",
+  "address": "718 Emerson St",
+  "start": 2026,
+  "end": null,
+  "category": "retail",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (car repair). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4426876,
+  "lng": -122.1600623
+ },
+ {
   "name": "Mangosteen",
   "address": "156 Hamilton Ave",
   "start": 2026,
@@ -1905,6 +2015,32 @@
   "note": "Open today (beauty). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.4433481,
   "lng": -122.1618742
+ },
+ {
+  "name": "VeloTechCycles",
+  "address": "732 Emerson St",
+  "start": 2026,
+  "end": null,
+  "category": "retail",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (bicycle). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4426272,
+  "lng": -122.1598329
+ },
+ {
+  "name": "Yoga Source",
+  "address": "158 Hamilton Ave",
+  "start": 2026,
+  "end": null,
+  "category": "fitness",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (fitness centre). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4434017,
+  "lng": -122.1618201
  },
  {
   "name": "Acme Glass Co",
@@ -2661,6 +2797,19 @@
   "lng": -122.1604039
  },
  {
+  "name": "Studio 650",
+  "address": "440 Kipling St",
+  "start": 2026,
+  "end": null,
+  "category": "fitness",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (dance). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4479417,
+  "lng": -122.1604888
+ },
+ {
   "name": "Zingsters",
   "address": "220 University Ave",
   "start": 2026,
@@ -2828,6 +2977,32 @@
   "note": "Open today (restaurant). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.4441572,
   "lng": -122.1609586
+ },
+ {
+  "name": "Whole Foods Market",
+  "address": "774 Emerson St",
+  "start": 2026,
+  "end": null,
+  "category": "retail",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (supermarket). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.442385,
+  "lng": -122.1596011
+ },
+ {
+  "name": "The Cowper Inn",
+  "address": "701 Cowper St",
+  "start": 2026,
+  "end": null,
+  "category": "hotel",
+  "approx": false,
+  "start_unknown": true,
+  "source": "osm",
+  "note": "Open today (guest house). Listed in OpenStreetMap; the year it opened isn't known yet.",
+  "lat": 37.4468167,
+  "lng": -122.1564339
  },
  {
   "name": "Sancho's Taqueria",
