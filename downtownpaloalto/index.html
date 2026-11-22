@@ -12,7 +12,7 @@
 <style>
 :root{
   --ink:#F3EEE3; --dim:#B9B3A6; --panel:#1C2629; --panel2:#243135; --line:#3A4A4F; --bad:#F2A3A3;
-  --retail:#EBC55A; --food:#E58C8C; --entertainment:#9DB8E0; --tech:#8FD1A8; --hotel:#C9A6E0; --landmark:#E6E1D6;
+  --retail:#EBC55A; --food:#E58C8C; --entertainment:#9DB8E0; --tech:#8FD1A8; --hotel:#C9A6E0; --landmark:#E6E1D6; --services:#D9A273;
   --display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;
   --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:dark;
@@ -123,7 +123,7 @@ textarea.field{resize:vertical;min-height:80px}
     <ul id="list"></ul>
     <div class="foot">
       <button class="ghost" id="suggestBtn">Suggest a place</button>
-      <div>Years with ~ are estimates. The satellite photo shows downtown today.</div>
+      <div>Years with ~ are estimates. Today’s places come from OpenStreetMap. The satellite photo shows downtown today.</div>
     </div>
   </aside>
 </main>
@@ -163,7 +163,7 @@ textarea.field{resize:vertical;min-height:80px}
 <script>
 const NOW = new Date().getFullYear();
 const SUGGEST_URL = "https://agenticallymine.com/api/dpa/suggest";
-const CATS = {retail:"Shops",food:"Food & drink",entertainment:"Theaters",tech:"Startups",hotel:"Hotels",landmark:"Landmarks"};
+const CATS = {retail:"Shops",food:"Food & drink",entertainment:"Theaters",tech:"Startups",hotel:"Hotels",landmark:"Landmarks",services:"Services"};
 const color = c => getComputedStyle(document.documentElement).getPropertyValue("--"+c).trim();
 const on = Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
 const $ = id => document.getElementById(id);
@@ -187,7 +187,7 @@ function fitAxis(){ // El Camino on the bottom edge, Middlefield on the top edge
 }
 fitAxis();
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {maxNativeZoom:19,maxZoom:20,attribution:"Imagery &copy; Esri, Maxar, Earthstar Geographics. Streets &copy; OpenStreetMap"}).addTo(map);
+  {maxNativeZoom:19,maxZoom:20,attribution:"Imagery &copy; Esri, Maxar, Earthstar Geographics. Current places and streets &copy; OpenStreetMap contributors"}).addTo(map);
 const streetLayer=L.layerGroup().addTo(map);
 const label=(ll,html,cls,anchor)=>L.marker(ll,{interactive:false,keyboard:false,
   icon:L.divIcon({className:"",html:`<div class="street ${cls}">${html}</div>`,iconSize:null,iconAnchor:anchor})}).addTo(streetLayer);
@@ -200,7 +200,8 @@ document.querySelector("#north svg").style.transform=`rotate(${-UNIV_BEARING}deg
 let stores=[], layer=L.layerGroup().addTo(map), markers=new Map();
 const endYear = s => s.end ?? NOW;
 const isOpen = (s,y) => s.start<=y && endYear(s)>=y;
-const yrs = s => `${s.approx?"~":""}${s.start}–${s.end ?? "today"}`;
+const yrs = s => s.start_unknown ? "Open today" : `${s.approx?"~":""}${s.start}–${s.end ?? "today"}`;
+const isNew = (s,y) => s.start===y && !s.start_unknown;
 const esc = t => String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ");
 
@@ -213,12 +214,12 @@ function hist(){
   const c=$("hist"), dpr=devicePixelRatio||1, w=c.clientWidth, h=c.clientHeight;
   c.width=w*dpr; c.height=h*dpr; const g=c.getContext("2d"); g.scale(dpr,dpr);
   const counts=[]; for(let y=1900;y<=NOW;y++) counts.push(stores.filter(s=>on[s.category]&&isOpen(s,y)).length);
-  const max=Math.max(1,...counts), bw=w/counts.length, cur=+slider.value-1900;
+  const max=Math.max(1,...counts.slice(0,-1)), bw=w/counts.length, cur=+slider.value-1900;
   counts.forEach((n,i)=>{ g.fillStyle = i===cur ? color("retail") : "rgba(243,238,227,.22)";
-    const bh=Math.max(n?2:0, n/max*(h-2)); g.fillRect(i*bw, h-bh, Math.max(1,bw-1), bh); });
+    const bh=Math.min(h, Math.max(n?2:0, n/max*(h-2))); g.fillRect(i*bw, h-bh, Math.max(1,bw-1), bh); });
 }
 function popup(s){
-  return `<div class="pop"><h3>${esc(s.name)}</h3><div class="yrs">${yrs(s)}</div><div class="addr">${esc(s.address)}</div>${esc(s.note)}${s.approx?'<div class="est">~ Dates are estimates.</div>':""}<br><button class="fix" data-name="${esc(s.name)}">Suggest a fix</button></div>`;
+  return `<div class="pop"><h3>${esc(s.name)}</h3><div class="yrs">${yrs(s)}</div><div class="addr">${esc(s.address)}</div>${esc(s.note)}${s.approx?'<div class="est">~ Dates are estimates.</div>':""}${s.start_unknown?'<div class="est">Know when it opened? Use Suggest a fix.</div>':""}<br><button class="fix" data-name="${esc(s.name)}">Suggest a fix</button></div>`;
 }
 function focusStore(s){
   if(!isOpen(s,+slider.value)){ slider.value=s.start; render(); }
@@ -231,7 +232,7 @@ function render(){
   layer.clearLayers(); markers.clear();
   const byAddr={};
   open.forEach(s=>{ const k=s.address, i=(byAddr[k]=(byAddr[k]||0)+1)-1;
-    const m=L.circleMarker([s.lat - i*0.00004, s.lng + i*0.00005],{radius:s.start===y?11:8,color:"#1C2629",weight:2,fillColor:color(s.category),fillOpacity:.95})
+    const m=L.circleMarker([s.lat - i*0.00004, s.lng + i*0.00005],{radius:isNew(s,y)?11:(s.start_unknown?6:8),color:"#1C2629",weight:2,fillColor:color(s.category),fillOpacity:.95})
       .bindPopup(popup(s)).bindTooltip(s.name,{className:"lbl",direction:"right",offset:[8,0],permanent:map.getZoom()>=18});
     m.addTo(layer); markers.set(s,m);
   });
@@ -240,10 +241,10 @@ function render(){
   let rows;
   if(words.length){
     rows=stores.filter(s=>{ const hay=norm(`${s.name} ${s.address} ${s.note}`); return words.every(w=>hay.includes(w)); })
-      .sort((a,b)=>a.start-b.start);
+      .sort((a,b)=>(a.start_unknown-b.start_unknown)||(a.start-b.start)||a.name.localeCompare(b.name));
     $("count").textContent = rows.length ? `${rows.length} match${rows.length>1?"es":""} across all years` : "No matches";
   } else {
-    rows=open.slice().sort((a,b)=>a.start-b.start);
+    rows=open.slice().sort((a,b)=>(a.start_unknown-b.start_unknown)||(a.start-b.start)||a.name.localeCompare(b.name));
     $("count").textContent = `Open in ${y}: ${open.length}`;
   }
   const ul=$("list"); ul.innerHTML="";
@@ -257,7 +258,7 @@ function render(){
   }
   rows.forEach(s=>{
     const li=document.createElement("li"); li.tabIndex=0;
-    li.className="item"+(s.start===y&&!words.length?" new":"")+(words.length&&!isOpen(s,y)?" off":"");
+    li.className="item"+(isNew(s,y)&&!words.length?" new":"")+(words.length&&!isOpen(s,y)?" off":"");
     li.innerHTML=`<i style="background:${color(s.category)}"></i><div><b>${esc(s.name)}</b><small>${esc(s.address)}, ${yrs(s)}</small></div>`;
     li.onclick=()=>focusStore(s);
     li.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();focusStore(s);} };

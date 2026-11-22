@@ -33,7 +33,7 @@ STORES = [
   ("Palo Alto Sport Shop & Toy World", "526 Waverley St", 1930, 2015, "retail", True, "Sporting goods and toys from 1930."),
   ("Gotham Shop", "520 Ramona St", 1925, 1940, "retail", True, "First building of the Ramona Street architectural district (Pedro de Lemos, 1925)."),
   ("Cardinal Hotel", "235 Hamilton Ave", 1924, None, "hotel", True, "Palo Alto's first non-frame hotel."),
-  ("Hotel President", "488 University Ave", 1929, None, "hotel", True, "1929 hotel, long used as apartments, now a hotel again."),
+  ("Hotel President", "488 University Ave", 1929, None, "hotel", True, "1929 hotel, long used as apartments; reopened as a hotel (now Graduate by Hilton Palo Alto)."),
   ("Shady Lane", "441 University Ave", 1975, 2015, "retail", True, "Craft store, gallery and gift shop; moved to Menlo Park in 2015."),
   ("St. Michael's Alley", "436 University Ave", 1959, 1977, "food", True, "Early coffeehouse and folk venue; later moved."),
   ("Coupa Cafe", "538 Ramona St", 2004, None, "food", True, "Venezuelan cafe, a startup meeting spot."),
@@ -68,3 +68,69 @@ for name, addr, s, e, cat, approx, note in STORES:
                 "approx": approx, "note": note, "lat": ll[0], "lng": ll[1]})
 json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "stores.json"), "w"), indent=1)
 print(f"{len(out)} entries written; not geocoded: {missing}")
+
+# ---------------------------------------------------------------------------
+# Current businesses from OpenStreetMap (osm_current.json, fetched via Overpass).
+# OSM has no opening years, so these get start=CUR and start_unknown=True.
+# Refresh: re-run the Overpass query in osm_query.txt, save as osm_current.json.
+import math, re
+OSM = os.path.join(os.path.dirname(os.path.abspath(__file__)), "osm_current.json")
+FOOD = {"restaurant","cafe","bar","pub","fast_food","ice_cream","bakery","pastry","chocolate","confectionery","tea","food_court","biergarten","coffee","deli","wine","alcohol"}
+ENT = {"cinema","theatre","nightclub"}
+HOTEL = {"hotel","motel","guest_house"}
+SERV = {"bank","hairdresser","beauty","hairdresser;beauty","dry_cleaning","optician","massage","copyshop","laundry","tailor","mobile_phone","pharmacy","chemist","glaziery","travel_agency"}
+SKIP_NAMES = {"Stanford Theater": "Stanford Theatre", "Palo Alto Creamery": "Peninsula Creamery",
+              "Graduate by Hilton Palo Alto": "Hotel President", "Apple Store": "Apple Store (current)"}
+ABBR = [(" Avenue"," Ave"),(" Street"," St"),(" Road"," Rd")]
+
+def norm(t): return re.sub(r"[^a-z0-9]", "", t.lower())
+def short(a):
+    for x, y in ABBR: a = a.replace(x, y)
+    return a
+
+def reverse(lat, lon):
+    key = f"rev:{lat:.5f},{lon:.5f}"
+    if key in cache: return cache[key]
+    q = urllib.parse.urlencode({"lat": lat, "lon": lon, "format": "json", "zoom": 18})
+    req = urllib.request.Request("https://nominatim.openstreetmap.org/reverse?" + q, headers={"User-Agent": "ofcourseduh-downtownpaloalto/1.0"})
+    r = json.load(urllib.request.urlopen(req, timeout=20)); time.sleep(1.1)
+    a = r.get("address", {}); val = short(f"{a.get('house_number','')} {a.get('road','')}".strip()) or "Downtown Palo Alto"
+    if not a.get("house_number"): val = "near " + val
+    cache[key] = val; json.dump(cache, open(CACHE, "w"), indent=1)
+    return val
+
+if os.path.exists(OSM):
+    K = math.cos(math.radians(37.446)); A = (37.44330, -122.16419); W = (37.44952, -122.15802)
+    def xy(la, ln): return ((ln - A[1]) * K * 111320, (la - A[0]) * 111320)
+    wx, wy = xy(*W); L = math.hypot(wx, wy); ux, uy = wx / L, wy / L
+    open_now = [s for s in out if s["end"] is None]
+    added, merged, seen = 0, 0, []
+    for e in json.load(open(OSM))["elements"]:
+        t = e.get("tags", {}); name = t.get("name")
+        la = e.get("lat") or e.get("center", {}).get("lat"); ln = e.get("lon") or e.get("center", {}).get("lon")
+        if not name or la is None: continue
+        x, y = xy(la, ln); along = x * ux + y * uy; perp = -x * uy + y * ux
+        if not (-80 <= along <= L + 80 and abs(perp) <= 270): continue   # downtown core: Alma..Webster, ~2 blocks each side
+        if name in SKIP_NAMES: merged += 1; continue
+        hn, st = t.get("addr:housenumber", "").split(";")[0], t.get("addr:street", "")
+        addr = short(f"{hn} {st}".strip()) if hn and st else reverse(la, ln)
+        # same place already in the hand-made list (open today, same address and a shared word)?
+        words = {w for w in re.findall(r"[a-z]{4,}", name.lower())}
+        if any(norm(s["address"]) == norm(addr) and words & set(re.findall(r"[a-z]{4,}", s["name"].lower())) for s in open_now):
+            merged += 1; continue
+        # exact same name as an open hand-made entry within ~150 m
+        if any(norm(s["name"]) == norm(name) and math.hypot(*(a - b for a, b in zip(xy(s["lat"], s["lng"]), (x, y)))) < 150 for s in open_now):
+            merged += 1; continue
+        # same name within 40 m in OSM itself (duplicate mapping)
+        if any(n == norm(name) and math.hypot(px - x, py - y) < 40 for n, px, py in seen): continue
+        seen.append((norm(name), x, y))
+        kind = t.get("amenity") or t.get("tourism") or t.get("shop") or ""
+        cat = "food" if kind in FOOD else "entertainment" if kind in ENT else "hotel" if kind in HOTEL else "services" if kind in SERV else "retail"
+        label = kind.replace("_", " ").replace(";", ", ")
+        out.append({"name": name, "address": addr, "start": CUR, "end": None, "category": cat, "approx": False,
+                    "start_unknown": True, "source": "osm",
+                    "note": f"Open today ({label}). Listed in OpenStreetMap; the year it opened isn't known yet.",
+                    "lat": la, "lng": ln})
+        added += 1
+    json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "stores.json"), "w"), indent=1)
+    print(f"OpenStreetMap: {added} current places added, {merged} merged with existing entries; total {len(out)}")

@@ -1,0 +1,7 @@
+[out:json][timeout:50];
+(
+  nwr["shop"](37.4405,-122.1680,37.4525,-122.1540);
+  nwr["amenity"~"^(restaurant|cafe|bar|pub|fast_food|ice_cream|cinema|theatre|nightclub|bank|pharmacy|food_court|biergarten)$"](37.4405,-122.1680,37.4525,-122.1540);
+  nwr["tourism"~"^(hotel|motel|guest_house)$"](37.4405,-122.1680,37.4525,-122.1540);
+);
+out center tags;
