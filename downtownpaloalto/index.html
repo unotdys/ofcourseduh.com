@@ -62,6 +62,7 @@ aside{background:var(--panel);border-left:1px solid var(--line);display:flex;fle
 .empty{padding:16px;color:var(--dim)}
 .foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);font-size:12px;color:var(--dim);display:grid;gap:8px}
 .foot button{justify-self:start}
+.foot .btns{display:flex;gap:8px;flex-wrap:wrap}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--panel);color:var(--ink);border-radius:6px}
 .leaflet-popup-content{margin:12px 14px;font:14px/1.45 var(--body);max-width:260px}
 .pop h3{margin:0 0 2px;font:600 16px/1.25 var(--body)}
@@ -132,7 +133,7 @@ textarea.field{resize:vertical;min-height:80px}
     </div>
     <ul id="list"></ul>
     <div class="foot">
-      <button class="ghost" id="suggestBtn">Suggest a place</button>
+      <div class="btns"><button class="ghost" id="suggestBtn">Suggest a place</button><button class="ghost" id="contactBtn">Contact us</button></div>
       <div>Years with ~ are estimates. Today’s places come from OpenStreetMap. The satellite photo shows downtown today.</div>
     </div>
   </aside>
@@ -164,6 +165,22 @@ textarea.field{resize:vertical;min-height:80px}
       <span id="msg" role="status"></span>
       <button type="button" class="ghost" id="cancel">Cancel</button>
       <button type="submit" id="send">Send suggestion</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="cdlg" aria-labelledby="cTitle">
+  <form id="cform" novalidate>
+    <h2 id="cTitle">Contact us</h2>
+    <p>Questions, corrections, old photos or stories about downtown Palo Alto: send a message. Add your email if you'd like a reply.</p>
+    <label>Your name <span>optional</span><input class="field" name="name" maxlength="80" autocomplete="name"></label>
+    <label>Your email <span>optional, only used to reply to you</span><input class="field" name="email" type="email" maxlength="160" autocomplete="email"></label>
+    <label>Message<textarea class="field" name="message" maxlength="5000" required style="min-height:140px"></textarea></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+    <div class="acts">
+      <span id="cmsg" role="status"></span>
+      <button type="button" class="ghost" id="ccancel">Cancel</button>
+      <button type="submit" id="csend">Send message</button>
     </div>
   </form>
 </dialog>
@@ -327,6 +344,30 @@ form.onsubmit=async e=>{
   }catch(err){
     bad(err.message.startsWith("Failed")||err.name==="TypeError" ? "The suggestion didn't go through. Check your connection and try again." : err.message);
     $("send").disabled=false; $("send").textContent="Send suggestion";
+  }
+};
+
+/* Contact us */
+const CONTACT_URL = "https://agenticallymine.com/api/dpa/contact";
+const cdlg=$("cdlg"), cform=$("cform"), cmsg=$("cmsg");
+$("contactBtn").onclick=()=>{ cform.reset(); cmsg.textContent=""; cmsg.className=""; $("csend").disabled=false; $("csend").textContent="Send message"; cdlg.showModal(); cform.name.focus(); };
+$("ccancel").onclick=()=>cdlg.close();
+cform.onsubmit=async e=>{
+  e.preventDefault();
+  const d=Object.fromEntries(new FormData(cform));
+  const bad=t=>{ cmsg.textContent=t; cmsg.className="err"; };
+  if(d.message.trim().length<2) return bad("Write a message first.");
+  if(d.email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) return bad("That email address doesn't look right.");
+  $("csend").disabled=true; $("csend").textContent="Sending…"; cmsg.textContent=""; cmsg.className="";
+  try{
+    const r=await fetch(CONTACT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(j.error||"The message didn't go through. Try again in a minute.");
+    cmsg.textContent="Sent. Thank you!"; $("csend").textContent="Sent";
+    setTimeout(()=>cdlg.open&&cdlg.close(),2000);
+  }catch(err){
+    bad(err.name==="TypeError" ? "The message didn't go through. Check your connection and try again." : err.message);
+    $("csend").disabled=false; $("csend").textContent="Send message";
   }
 };
 
