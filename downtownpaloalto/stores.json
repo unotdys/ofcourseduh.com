@@ -385,6 +385,50 @@
   "lng": -122.16191
  },
  {
+  "name": "Stars Palo Alto",
+  "address": "265 Lytton Ave",
+  "start": 1995,
+  "end": 1997,
+  "category": "food",
+  "approx": false,
+  "note": "Jeremiah Tower's Palo Alto branch of San Francisco's Stars, in the former Gatehouse restaurant building. Became Spago in late 1997.",
+  "lat": 37.44637,
+  "lng": -122.1633485
+ },
+ {
+  "name": "Spago Palo Alto",
+  "address": "265 Lytton Ave",
+  "start": 1997,
+  "end": 2009,
+  "category": "food",
+  "approx": true,
+  "note": "Wolfgang Puck's Spago took over the Stars space, opening Dec 15, 1997, and lasted about a dozen years.",
+  "lat": 37.44637,
+  "lng": -122.1633485
+ },
+ {
+  "name": "Osteria Toscana",
+  "address": "247 Hamilton Ave",
+  "start": 1986,
+  "end": null,
+  "category": "food",
+  "approx": false,
+  "note": "Tuscan restaurant on the ground floor of the Cardinal Hotel, at Hamilton & Ramona, since 1986.",
+  "lat": 37.4444773,
+  "lng": -122.1611562
+ },
+ {
+  "name": "Nobu Palo Alto",
+  "address": "180 Hamilton Ave",
+  "start": 2017,
+  "end": null,
+  "category": "food",
+  "approx": true,
+  "note": "Nobu Matsuhisa's restaurant in the Epiphany Hotel.",
+  "lat": 37.4436027,
+  "lng": -122.1615453
+ },
+ {
   "name": "Palo Alto Post Office",
   "address": "380 Hamilton Ave",
   "start": 1932,
@@ -1120,19 +1164,6 @@
   "note": "Open today (hairdresser). Listed in OpenStreetMap; the year it opened isn't known yet.",
   "lat": 37.4446163,
   "lng": -122.1613197
- },
- {
-  "name": "Osteria",
-  "address": "247 Hamilton Ave",
-  "start": 2026,
-  "end": null,
-  "category": "food",
-  "approx": false,
-  "start_unknown": true,
-  "source": "osm",
-  "note": "Open today (restaurant). Listed in OpenStreetMap; the year it opened isn't known yet.",
-  "lat": 37.4444773,
-  "lng": -122.1611562
  },
  {
   "name": "Lee Optometrics",

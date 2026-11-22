@@ -43,6 +43,10 @@ STORES = [
   ("Copeland's Sports", "375 University Ave", 1990, 2002, "retail", True, "Sporting goods store at University & Waverley, remembered open in the early 1990s. The Cheesecake Factory replaced it after a 2003 renovation."),
   ("The Cheesecake Factory", "375 University Ave", 2003, 2018, "food", False, "Opened in late 2003 in the former Copeland's building; closed May 26, 2018."),
   ("Roger's Deli", "Ramona St near University Ave", 1990, 1995, "food", True, "Deli on Ramona, around the corner from Peninsula Beauty Supply, remembered open in the early 1990s. Exact address and years unknown; pin placement approximate."),
+  ("Stars Palo Alto", "265 Lytton Ave", 1995, 1997, "food", False, "Jeremiah Tower's Palo Alto branch of San Francisco's Stars, in the former Gatehouse restaurant building. Became Spago in late 1997."),
+  ("Spago Palo Alto", "265 Lytton Ave", 1997, 2009, "food", True, "Wolfgang Puck's Spago took over the Stars space, opening Dec 15, 1997, and lasted about a dozen years."),
+  ("Osteria Toscana", "247 Hamilton Ave", 1986, None, "food", False, "Tuscan restaurant on the ground floor of the Cardinal Hotel, at Hamilton & Ramona, since 1986."),
+  ("Nobu Palo Alto", "180 Hamilton Ave", 2017, None, "food", True, "Nobu Matsuhisa's restaurant in the Epiphany Hotel."),
   ("Palo Alto Post Office", "380 Hamilton Ave", 1932, None, "landmark", True, "Birge Clark's Spanish Colonial post office."),
   ("Palo Alto Depot", "95 University Ave", 1941, None, "landmark", True, "Streamline Moderne train station (Southern Pacific, now Caltrain)."),
 ]
@@ -110,7 +114,7 @@ if os.path.exists(OSM):
         la = e.get("lat") or e.get("center", {}).get("lat"); ln = e.get("lon") or e.get("center", {}).get("lon")
         if not name or la is None: continue
         x, y = xy(la, ln); along = x * ux + y * uy; perp = -x * uy + y * ux
-        if not (-80 <= along <= L + 80 and abs(perp) <= 270): continue   # downtown core: Alma..Webster, ~2 blocks each side
+        if not (-80 <= along <= L + 200 and abs(perp) <= 270): continue   # downtown: Alma..Middlefield, ~2 blocks each side (Lytton, Hamilton, Forest)
         if name in SKIP_NAMES: merged += 1; continue
         hn, st = t.get("addr:housenumber", "").split(";")[0], t.get("addr:street", "")
         addr = short(f"{hn} {st}".strip()) if hn and st else reverse(la, ln)
