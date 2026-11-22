@@ -507,6 +507,18 @@
   "lng": -122.1651647
  },
  {
+  "name": "Sam's Chowder House",
+  "address": "185 University Ave",
+  "start": 2013,
+  "end": 2016,
+  "category": "food",
+  "approx": false,
+  "note": "Downtown branch of the Half Moon Bay seafood restaurant. It opened in November 2013 in the former Campo 185 space and closed in December 2016, when the space was sold to Wahlburgers.",
+  "lat": 37.4447261,
+  "lng": -122.1631693,
+  "source": "suggestion"
+ },
+ {
   "name": "Nola's",
   "address": "near Ramona St",
   "start": 2026,
