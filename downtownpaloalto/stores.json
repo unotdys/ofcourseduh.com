@@ -352,6 +352,39 @@
   "lng": -122.1623137
  },
  {
+  "name": "Copeland's Sports",
+  "address": "375 University Ave",
+  "start": 1990,
+  "end": 2002,
+  "category": "retail",
+  "approx": true,
+  "note": "Sporting goods store at University & Waverley, remembered open in the early 1990s. The Cheesecake Factory replaced it after a 2003 renovation.",
+  "lat": 37.4470997,
+  "lng": -122.1609139
+ },
+ {
+  "name": "The Cheesecake Factory",
+  "address": "375 University Ave",
+  "start": 2003,
+  "end": 2018,
+  "category": "food",
+  "approx": false,
+  "note": "Opened in late 2003 in the former Copeland's building; closed May 26, 2018.",
+  "lat": 37.4470997,
+  "lng": -122.1609139
+ },
+ {
+  "name": "Roger's Deli",
+  "address": "Ramona St near University Ave",
+  "start": 1990,
+  "end": 1995,
+  "category": "food",
+  "approx": true,
+  "note": "Deli on Ramona, around the corner from Peninsula Beauty Supply, remembered open in the early 1990s. Exact address and years unknown; pin placement approximate.",
+  "lat": 37.44512,
+  "lng": -122.16191
+ },
+ {
   "name": "Palo Alto Post Office",
   "address": "380 Hamilton Ave",
   "start": 1932,

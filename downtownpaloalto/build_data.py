@@ -40,6 +40,9 @@ STORES = [
   ("Il Fornaio", "520 Cowper St", 1987, None, "food", True, "In the Garden Court Hotel."),
   ("Evvia Estiatorio", "420 Emerson St", 1995, None, "food", True, "Greek restaurant."),
   ("Pizza A Go-Go", "220 University Ave", 1988, 2007, "food", True, "Pizza by the slice, open late on weekends. Business records give 1988 as its start; it later moved to 335 University Ave."),
+  ("Copeland's Sports", "375 University Ave", 1990, 2002, "retail", True, "Sporting goods store at University & Waverley, remembered open in the early 1990s. The Cheesecake Factory replaced it after a 2003 renovation."),
+  ("The Cheesecake Factory", "375 University Ave", 2003, 2018, "food", False, "Opened in late 2003 in the former Copeland's building; closed May 26, 2018."),
+  ("Roger's Deli", "Ramona St near University Ave", 1990, 1995, "food", True, "Deli on Ramona, around the corner from Peninsula Beauty Supply, remembered open in the early 1990s. Exact address and years unknown; pin placement approximate."),
   ("Palo Alto Post Office", "380 Hamilton Ave", 1932, None, "landmark", True, "Birge Clark's Spanish Colonial post office."),
   ("Palo Alto Depot", "95 University Ave", 1941, None, "landmark", True, "Streamline Moderne train station (Southern Pacific, now Caltrain)."),
 ]
