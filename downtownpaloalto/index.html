@@ -346,7 +346,7 @@ addEventListener("resize",hist);
 
 const h=parseInt(location.hash.slice(1)); if(h>=1900&&h<=NOW) slider.value=h;
 ticks(); chips();
-fetch("stores.json").then(r=>r.json()).then(d=>{ stores=d; render(); })
+fetch("stores.json",{cache:"no-cache"}).then(r=>r.json()).then(d=>{ stores=d; render(); })
   .catch(()=>{ $("list").innerHTML='<li class="empty">The store list didn’t load. Reload the page to try again.</li>'; });
 </script>
 </body>
