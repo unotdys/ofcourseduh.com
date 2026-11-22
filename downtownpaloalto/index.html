@@ -48,7 +48,10 @@ aside{background:var(--panel);border-left:1px solid var(--line);display:flex;fle
 .chip{font:500 12px var(--body);color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
 .chip[aria-pressed=false]{opacity:.4}
-#list{list-style:none;margin:0;padding:6px 0;overflow:auto;flex:1}
+#list{list-style:none;margin:0;padding:0 0 28px;overflow-y:scroll;flex:1;min-height:0;scrollbar-width:thin;scrollbar-color:var(--line) transparent;-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 36px),transparent)}
+#list::-webkit-scrollbar{width:8px}#list::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.grp{position:sticky;top:0;z-index:1;background:var(--panel);padding:10px 16px 6px;font:800 15px/1 var(--display);letter-spacing:.04em;color:var(--dim);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.grp i{width:9px;height:9px;border-radius:50%}
 .item{display:grid;grid-template-columns:12px 1fr;gap:10px;padding:9px 16px;cursor:pointer;border-left:3px solid transparent}
 .item:hover{background:var(--panel2)}
 .item.new{border-left-color:var(--retail)}
@@ -90,7 +93,14 @@ textarea.field{resize:vertical;min-height:80px}
 @media (max-width:760px){
   header{grid-template-columns:1fr;padding-left:12px;padding-right:12px}
   .year{font-size:54px}
-  main{grid-template-columns:1fr;grid-template-rows:1fr 42%}
+  main{grid-template-columns:1fr;grid-template-rows:1fr 50%}
+  .ahead{padding:10px 12px 8px}
+  .ahead h2{margin:8px 0 6px;font-size:15px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+  .foot{padding-top:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .foot div{display:none}
   aside{border-left:0;border-top:1px solid var(--line)}
   .row{grid-template-columns:1fr 1fr}
   .row label:last-child{grid-column:1/-1}
@@ -256,14 +266,20 @@ function render(){
     ul.appendChild(li);
     const b=$("emptySuggest"); if(b) b.onclick=()=>openForm({name:$("q").value.trim()});
   }
-  rows.forEach(s=>{
-    const li=document.createElement("li"); li.tabIndex=0;
-    li.className="item"+(isNew(s,y)&&!words.length?" new":"")+(words.length&&!isOpen(s,y)?" off":"");
-    li.innerHTML=`<i style="background:${color(s.category)}"></i><div><b>${esc(s.name)}</b><small>${esc(s.address)}, ${yrs(s)}</small></div>`;
-    li.onclick=()=>focusStore(s);
-    li.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();focusStore(s);} };
-    ul.appendChild(li);
+  const groups = Object.keys(CATS).map(k=>[k, rows.filter(s=>s.category===k)]).filter(([,r])=>r.length);
+  groups.forEach(([k,list])=>{
+    if(groups.length>1){ const h=document.createElement("li"); h.className="grp"; h.setAttribute("role","presentation");
+      h.innerHTML=`<i style="background:${color(k)}"></i>${CATS[k]} (${list.length})`; ul.appendChild(h); }
+    list.forEach(s=>{
+      const li=document.createElement("li"); li.tabIndex=0;
+      li.className="item"+(isNew(s,y)&&!words.length?" new":"")+(words.length&&!isOpen(s,y)?" off":"");
+      li.innerHTML=`<i style="background:${color(s.category)}"></i><div><b>${esc(s.name)}</b><small>${esc(s.address)}, ${yrs(s)}</small></div>`;
+      li.onclick=()=>focusStore(s);
+      li.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();focusStore(s);} };
+      ul.appendChild(li);
+    });
   });
+  ul.scrollTop=0;
   hist();
   history.replaceState(null,"","#"+y);
 }
