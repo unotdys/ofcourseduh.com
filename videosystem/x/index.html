@@ -115,10 +115,11 @@ pre{background:var(--panel);padding:12px;border-radius:6px;white-space:pre-wrap;
 <p>Ask for a few treatment samples instead of one fix. My room had a 120 Hz hum and low rumble, so Claude rendered three options (hum notch, light noise reduction, limiter in different strengths). I listened and picked one, and it went into the brief as the default chain.</p>
 <p><strong>Prompt: audio options</strong></p>
 <blockquote>The mix has a hum and some low rumble. Make three 30-second<br>samples from the same passage with different treatments, from<br>light to strong, and put them on a page so I can A/B them.</blockquote>
-<p>Two things to check every time:</p>
+<p>Three things to check every time:</p>
 <ul>
 <li><strong>Sync after processing.</strong> Some noise-reduction filters add a few milliseconds of delay. Mine added about 26 ms, enough to make lips look off. Have Claude measure and correct it.</li>
 <li><strong>Individual mics.</strong> On one episode, one mic was about 15 dB noisier than the rest. Rebuilding the mix from the separate mic tracks, with that one gated, fixed it.</li>
+<li><strong>Loudness of the file you upload.</strong> Measure the final encoded file, not the mix, because the AAC encode raises peaks. For shorts I aim for −14 LUFS, with the true peak at or below −1 dBTP for YouTube and −2 dBTP for X.</li>
 </ul>
 
 <h2>Step 6: Cut the shorts with CutCannon</h2>
@@ -133,7 +134,7 @@ pre{background:var(--panel);padding:12px;border-radius:6px;white-space:pre-wrap;
 <li><strong>Transcribe.</strong> Whisper on the GPU gives sentence lines with word timings. Fillers stay visible as (um) so they can be cut precisely.</li>
 <li><strong>Plan.</strong> Claude reads the transcript and writes an edit plan: which lines make each clip, the hook text, whose face to follow. Plans are versioned (v001, v002…) and never overwritten, so “undo” is just a pointer.</li>
 <li><strong>Render.</strong> Tightens fillers and pauses, crops to 1080×1920 following the speaker through camera switches, burns in word-by-word captions and a hook card, and loudness-normalizes to −14 LUFS.</li>
-<li><strong>QA.</strong> Every render gets checked automatically: A/V sync, duration, color, loudness, caption coverage, the hook card, leftover fillers (it re-transcribes the output), joins (words clipped or doubled at a cut) and framing. That’s nine checks, plus a contact sheet for each render.</li>
+<li><strong>QA.</strong> Every render gets checked automatically: A/V sync, duration, color, loudness, caption coverage, the hook card, leftover fillers (it re-transcribes the output), joins (words clipped or doubled at a cut) and framing. That’s nine checks, plus a contact sheet for each render. On my machine I’ve added a tenth, a freeze check: if the picture stops moving for 2 seconds or more, the render fails. A frozen render passes every check that only looks at still frames.</li>
 <li><strong>Post kit.</strong> For every short it writes a _post.md with the title, description and hashtags for YouTube Shorts, TikTok and Instagram Reels, plus a cover image and a caption file.</li>
 </ol>
 <p>A plan is a small JSON file, which is why it’s easy for Claude to write and for you to read:</p>
@@ -169,6 +170,8 @@ pre{background:var(--panel);padding:12px;border-radius:6px;white-space:pre-wrap;
 <p><strong>Prompt: overnight queue</strong></p>
 <blockquote>Set up an overnight queue on the editing machine, one job after<br>another, each with a timeout and its own log:<br>1. Re-cut the Backstory episode with the second camera that<br>   just arrived.<br>2. Edit the Music and BatFast episodes.<br>3. Make shorts for all three.<br>4. Wait for the client's footage upload to finish, then apply<br>   ADDENDUM-9 to Gigs and Wigs.<br>Write a line to OVERNIGHT-STATUS.md as each job starts and ends.<br>Launch it detached so it survives a dropped connection.<br>Nothing gets uploaded.</blockquote>
 <p>Ask Claude to launch the queue detached (noBGP’s detach option, or setsid/nohup over SSH) so it keeps running if the connection drops. Then pick the chat up from your phone in the morning and ask how the night went. The answer comes from that status file.</p>
+<p><strong>Pin the model in every queued job.</strong> A headless claude -p run without --model uses whichever model you last picked interactively. One evening on the most expensive model can bill the whole night’s batch at that rate. Write claude -p --model sonnet in queue scripts; my machine also has a small wrapper that adds it when a job forgets.</p>
+<p><strong>Tell each job what “done” means.</strong> For example: every render passes QA and the edit notes are written. Add that a timeout or a failed render is something to fix and keep going, not a reason to stop. Without that, unattended runs sometimes end early with a list of what’s left.</p>
 
 <h2>Step 9: Publish by hand</h2>
 <p>Nothing uploads, posts or approves itself. Every brief ends with that line, and it’s the one rule I’d keep no matter what.</p>
@@ -212,6 +215,8 @@ pre{background:var(--panel);padding:12px;border-radius:6px;white-space:pre-wrap;
 <li><strong>Ask for a NEEDS HUMAN CHECK list.</strong> Uncertain name spellings, guessed titles and odd cuts go at the top of the edit notes, so you know exactly what to watch.</li>
 <li><strong>Keep the old render.</strong> Save the previous final before each revision, so you can always go back.</li>
 <li><strong>Expect missing footage.</strong> Remote guests often have no video recorded. Decide early whether that episode is audio-only or uses the call recording.</li>
+<li><strong>Write briefs in numbers.</strong> For anything animated (intro bumpers, end cards, hook cards), give hex colors, frame counts, easing curves and spring settings instead of words like “smooth” or “premium”. Render it frame by frame from a function of time instead of screen-recording it. Much of this comes from <a href="https://x.com/flxrnc/status/2120207374250049675">@flxrnc’s Fable 5.2 Motion Playbook</a>.</li>
+<li><strong>Write limits as numbers.</strong> “At most 2 renders at once” works. “Don’t overload the machine” doesn’t.</li>
 <li><strong>Start with one show.</strong> Get one brief right, then copy the structure for the next.</li>
 </ul>
 <p>The hours of syncing, cutting, captioning and rendering are gone. What’s left is the part I actually like: choosing what goes out.</p>
